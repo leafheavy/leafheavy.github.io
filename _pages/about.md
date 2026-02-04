@@ -32,9 +32,9 @@ My current research interests focus on dynamic adaptation and memory in intellig
 
 [Multi-Task Test-time Adaptation via Gradient Consensus and Plasticity Constraint]()
 
-**Zhong Ye**, Yu Hu (Corresponding Author), Zhenguo Yang
+**Zhong Ye**, Yu Hu *(Corresponding Author)*, Zhenguo Yang
 
-[**Project**]() <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
+[**Project**]("https://github.com/leafheavy/MT-TTA") <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
 - We have open-sourced what is, to our knowledge, the first Test-Time Adaptation project for multi-task learning. We implemented multi-task versions of various classic TTA methods, including but not limited to: Tent, EATA.
 </div>
 </div>
@@ -50,7 +50,7 @@ My current research interests focus on dynamic adaptation and memory in intellig
 
 <!-- # 💬 Invited Talks
 - *2021.06*, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. 
-- *2021.03*, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet.  \| [\[video\]](https://github.com/)
+- *2021.03*, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet.  \| [\[video\]](https://github.com/) -->
 
 # 💻 Internships
-- *2019.05 - 2020.02*, [Lorem](https://github.com/), China. -->
+- *2025.09 - 2026.02*, onducted optimization of few-shot speech recognition algorithms for out-of-vocabulary (OOV) cases, successfully reducing the Error Rate (ER) by 8% on proprietary enterprise datasets. *Shenzhen NeoAI Future Technology Co., Ltd.*

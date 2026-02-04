@@ -53,4 +53,4 @@ My current research interests focus on dynamic adaptation and memory in intellig
 - *2021.03*, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet.  \| [\[video\]](https://github.com/) -->
 
 # 💻 Internships
-- *2025.09 - 2026.02*, Conducted optimization of few-shot speech recognition algorithms for out-of-vocabulary (OOV) cases, successfully reducing the Error Rate (ER) by 8% on proprietary enterprise datasets. *Shenzhen NeoAI Future Technology Co., Ltd.*
+- *2025.09 - 2026.02*, Conducted optimization of few-shot speech recognition algorithms for out-of-vocabulary (OOV) circumstance, successfully reducing the Error Rate (ER) by 8% on proprietary enterprise datasets. *Shenzhen NeoAI Future Technology Co., Ltd.*

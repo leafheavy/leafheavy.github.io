@@ -6,7 +6,7 @@
 # `jekyll serve`. If you change this file, please restart the server process.
 
 # Site Settings
-title                    : "Zhong Ye (叶重)"
+title                    : "Zhong Ye"
 description              : "Zhong Ye's Homepage"
 repository               : "leafheavy/leafheavy.github.io"
 google_scholar_stats_use_cdn : true
@@ -21,7 +21,7 @@ baidu_site_verification  :  # get baidu_site_verification from https://ziyuan.ba
 
 # Site Author
 author:
-  name             : "Zhong Ye"
+  name             : "Zhong Ye (叶重)"
   avatar           : "images/Personal_image1.jpg"
   bio              : "Guangdong Unviersity of Technology"
   location         : "Guangdong, China"

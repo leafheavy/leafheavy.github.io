@@ -1,5 +1,5 @@
 ---
-layout: archive   # 这里的 archive 是原主题为了支持侧边栏而设计的布局
+layout: default 
 title: "Blog"
 permalink: /blog/
 author_profile: true  # 关键！这一行保证了左侧头像和导航栏的显示

@@ -6,7 +6,7 @@ author_profile: true  # 关键！这一行保证了左侧头像和导航栏的�
 ---
 
 <!-- 引入我们的样式 -->
-<link rel="stylesheet" href="/assets/css/apple-style.css">
+<link rel="stylesheet" href="/assets/css/apple-style-for-blog.css">
 
 <div class="apple-content">
   <!-- 列表容器 -->

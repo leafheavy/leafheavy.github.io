@@ -1,25 +1,53 @@
-# main links links
+# Navigation configuration
+# This file defines the main navigation menu for your site
+
 main:
-  - title: "About Me"
-    url: "/#about-me"
-
-  # - title: "News"
-  #   url: "/#-news"
-
+  - title: "Home"
+    url: /
+    
+  - title: "About"
+    url: /about/
+    
   - title: "Publications"
-    url: "/#-publications"
-
-  - title: "Honors and Awards"
-    url: "/#-honors-and-awards"
-
-  - title: "Educations"
-    url: "/#-educations"
-
-  # - title: "Invited Talks"
-  #   url: "/#-invited-talks"
-
-  - title: "Internships"
-    url: "/#-internships"
-
+    url: /publications/
+    
   - title: "Blog"
     url: /blog/
+    layout: blog  # This helps identify blog pages
+    
+  - title: "Contact"
+    url: /contact/
+
+# Optional: Footer navigation
+footer:
+  - title: "Privacy Policy"
+    url: /privacy/
+    
+  - title: "Terms of Service"
+    url: /terms/
+    
+  - title: "GitHub"
+    url: https://github.com/yourusername
+    external: true
+    
+  - title: "Twitter"
+    url: https://twitter.com/yourusername
+    external: true
+
+# Optional: Social links for header/footer
+social:
+  - platform: "GitHub"
+    url: https://github.com/yourusername
+    icon: github
+    
+  - platform: "Twitter"
+    url: https://twitter.com/yourusername
+    icon: twitter
+    
+  - platform: "LinkedIn"
+    url: https://linkedin.com/in/yourusername
+    icon: linkedin
+    
+  - platform: "Email"
+    url: mailto:your.email@example.com
+    icon: email

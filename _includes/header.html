@@ -1,0 +1,309 @@
+<!-- Site Header with Navigation -->
+<header class="site-header">
+  <div class="header-container">
+    <!-- Site Logo/Title -->
+    <div class="site-logo">
+      <a href="{{ '/' | relative_url }}" aria-label="Home">
+        {% if site.logo %}
+          <img src="{{ site.logo | relative_url }}" alt="{{ site.title }}" class="logo-image">
+        {% else %}
+          <span class="logo-text">{{ site.title | default: "Your Name" }}</span>
+        {% endif %}
+      </a>
+    </div>
+    
+    <!-- Navigation -->
+    <nav class="site-nav" role="navigation" aria-label="Main navigation">
+      <!-- Mobile Menu Toggle -->
+      <input type="checkbox" id="nav-trigger" class="nav-trigger" aria-hidden="true">
+      <label for="nav-trigger" class="nav-toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </label>
+      
+      <!-- Navigation Menu -->
+      <ul class="nav-menu">
+        {% if site.data.navigation.main %}
+          {% for item in site.data.navigation.main %}
+            <li class="nav-item {% if page.url == item.url or page.layout == item.layout %}active{% endif %}">
+              <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
+            </li>
+          {% endfor %}
+        {% else %}
+          <!-- Default navigation if navigation.yml doesn't exist -->
+          <li class="nav-item {% if page.url == '/' %}active{% endif %}">
+            <a href="{{ '/' | relative_url }}">Home</a>
+          </li>
+          <li class="nav-item {% if page.url == '/about/' %}active{% endif %}">
+            <a href="{{ '/about/' | relative_url }}">About</a>
+          </li>
+          <li class="nav-item {% if page.url contains '/blog' or page.layout == 'post' %}active{% endif %}">
+            <a href="{{ '/blog/' | relative_url }}">Blog</a>
+          </li>
+          <li class="nav-item {% if page.url == '/publications/' %}active{% endif %}">
+            <a href="{{ '/publications/' | relative_url }}">Publications</a>
+          </li>
+          <li class="nav-item {% if page.url == '/contact/' %}active{% endif %}">
+            <a href="{{ '/contact/' | relative_url }}">Contact</a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- Additional CSS for ensuring header consistency -->
+<style>
+  /* Ensure header is always visible and consistent */
+  .site-header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    z-index: 1000;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .site-header.scrolled {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 64px;
+  }
+
+  /* Logo Styles */
+  .site-logo a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .site-logo a:hover {
+    opacity: 0.7;
+  }
+
+  .logo-image {
+    height: 36px;
+    width: auto;
+  }
+
+  .logo-text {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1d1d1f;
+    letter-spacing: -0.01em;
+  }
+
+  /* Navigation Styles */
+  .site-nav {
+    position: relative;
+  }
+
+  .nav-trigger {
+    display: none;
+  }
+
+  .nav-toggle {
+    display: none;
+    cursor: pointer;
+    width: 24px;
+    height: 20px;
+    position: relative;
+    z-index: 1001;
+  }
+
+  .nav-toggle span {
+    display: block;
+    position: absolute;
+    height: 2px;
+    width: 100%;
+    background: #1d1d1f;
+    border-radius: 2px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .nav-toggle span:nth-child(1) {
+    top: 0;
+  }
+
+  .nav-toggle span:nth-child(2) {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .nav-toggle span:nth-child(3) {
+    bottom: 0;
+  }
+
+  .nav-menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 32px;
+    align-items: center;
+  }
+
+  .nav-item {
+    position: relative;
+  }
+
+  .nav-item a {
+    font-size: 16px;
+    color: #1d1d1f;
+    text-decoration: none;
+    font-weight: 400;
+    transition: color 0.2s ease;
+    position: relative;
+    display: block;
+    padding: 4px 0;
+  }
+
+  .nav-item a:hover {
+    color: #0066cc;
+  }
+
+  .nav-item a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #0066cc;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .nav-item a:hover::after,
+  .nav-item.active a::after {
+    transform: scaleX(1);
+  }
+
+  .nav-item.active a {
+    color: #0066cc;
+    font-weight: 500;
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 768px) {
+    .nav-toggle {
+      display: block;
+    }
+
+    .nav-menu {
+      display: none;
+      position: absolute;
+      top: 64px;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      gap: 0;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .nav-trigger:checked ~ .nav-menu {
+      display: flex;
+    }
+
+    .nav-trigger:checked ~ .nav-toggle span:nth-child(1) {
+      transform: translateY(9px) rotate(45deg);
+    }
+
+    .nav-trigger:checked ~ .nav-toggle span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .nav-trigger:checked ~ .nav-toggle span:nth-child(3) {
+      transform: translateY(-9px) rotate(-45deg);
+    }
+
+    .nav-item {
+      width: 100%;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .nav-item:last-child {
+      border-bottom: none;
+    }
+
+    .nav-item a {
+      padding: 16px 0;
+      font-size: 18px;
+    }
+  }
+
+  /* Dark Mode Support */
+  @media (prefers-color-scheme: dark) {
+    .site-header {
+      background: rgba(29, 29, 31, 0.95);
+      border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .logo-text,
+    .nav-item a,
+    .nav-toggle span {
+      color: #f5f5f7;
+      background: #f5f5f7;
+    }
+
+    .nav-item a:hover,
+    .nav-item.active a {
+      color: #2997ff;
+    }
+
+    .nav-item a::after {
+      background: #2997ff;
+    }
+
+    @media (max-width: 768px) {
+      .nav-menu {
+        background: rgba(29, 29, 31, 0.98);
+        border-bottom-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .nav-item {
+        border-bottom-color: rgba(255, 255, 255, 0.05);
+      }
+    }
+  }
+</style>
+
+<!-- Header Scroll Effect Script -->
+<script>
+  (function() {
+    const header = document.querySelector('.site-header');
+    let lastScroll = 0;
+
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+      
+      if (currentScroll > 10) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+      
+      lastScroll = currentScroll;
+    });
+  })();
+</script>

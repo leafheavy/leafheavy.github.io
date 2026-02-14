@@ -1,43 +1,113 @@
 ---
-title: "基于 Jekyll 的博客搭建心得"
-date: 2024-02-14
-permalink: /posts/2024/02/my-first-tech-blog/
-tags:
-  - Jekyll
-  - 教程
-category: tech
-# 关键点：开启 LaTeX 数学公式支持
-mathjax: true
+layout: post
+title: "Welcome to My New Blog!"
+date: 2026-02-14
+author: "Your Name"
+tags: [announcement, blogging, jekyll]
+image: /images/blog/welcome-post.jpg
+description: "A warm welcome to my newly redesigned blog with improved navigation and beautiful Apple-inspired design."
+read_time: 3
+share: true
+show_related: true
 ---
 
-## 前言
+Welcome to my newly redesigned blog! I'm excited to share this space where I'll be posting about technology, research, and various projects I'm working on.
 
-这是我的第一篇技术博客。
+## What's New?
 
-## 1. 关于数学公式 (LaTeX)
+This blog has been completely redesigned with several key improvements:
 
-由于我在文件头设置了 `mathjax: true`，我现在可以写复杂的公式了：
+### 1. Consistent Navigation
+The navigation bar now appears consistently across all pages, including the blog homepage and individual post pages. No more disappearing menus!
 
-行内公式：$ E = mc^2 $
+### 2. Apple-Inspired Design
+Taking inspiration from Apple's design philosophy, the new blog features:
+- Clean, minimalist aesthetics
+- Smooth animations and transitions
+- Beautiful typography with SF Pro fonts
+- Responsive design that works on all devices
 
-块级公式：
-$$
-J(\theta) = \frac{1}{2m} \sum_{i=1}^m (h_\theta(x^{(i)}) - y^{(i)})^2
-$$
+### 3. Enhanced User Experience
+- **Reading progress bar**: Track your progress through longer articles
+- **Share buttons**: Easily share posts on social media
+- **Related posts**: Discover more content based on tags
+- **Responsive images**: Optimized loading for better performance
 
-## 2. 关于插入图片
+## What to Expect
 
-图片我已经放入了仓库的 `images/` 文件夹中。
+In upcoming posts, I'll be sharing:
 
-![我的头像](/images/Personal_image1.jpg)
+- **Technical tutorials** on web development and machine learning
+- **Research insights** from my academic work
+- **Project showcases** highlighting interesting work
+- **Tips and tricks** I've learned along the way
 
-或者使用 HTML 语法控制大小：
-<img src="/images/Personal_image1.jpg" width="200">
+## Code Example
 
-## 3. 代码高亮
+Here's a simple example of how easy it is to include code snippets in posts:
 
 ```python
-import numpy as np
+def greet(name):
+    """A friendly greeting function"""
+    return f"Hello, {name}! Welcome to my blog."
 
-def sigmoid(x):
-    return 1 / (1 + np.exp(-x))
+# Usage
+message = greet("Reader")
+print(message)
+```
+
+And here's some JavaScript:
+
+```javascript
+const blogPost = {
+  title: "Welcome Post",
+  date: new Date(),
+  tags: ["announcement", "blogging"],
+  
+  publish() {
+    console.log(`Publishing: ${this.title}`);
+  }
+};
+
+blogPost.publish();
+```
+
+## Images and Media
+
+You can easily include images in your posts:
+
+![Sample Image](/images/blog/sample-image.jpg)
+*Caption: A beautiful sample image to demonstrate the image feature*
+
+## Lists and Formatting
+
+### Unordered List
+- First item with **bold text**
+- Second item with *italic text*
+- Third item with `inline code`
+
+### Ordered List
+1. Step one: Plan your content
+2. Step two: Write your post
+3. Step three: Add images and code
+4. Step four: Publish!
+
+## Blockquotes
+
+> "The best way to predict the future is to invent it."
+> 
+> — Alan Kay
+
+## What's Next?
+
+Stay tuned for more content! Make sure to:
+
+1. Bookmark this blog
+2. Follow me on [Twitter](https://twitter.com/yourusername)
+3. Subscribe to the RSS feed (coming soon!)
+
+Thanks for reading, and I look forward to sharing more with you!
+
+---
+
+*Have questions or feedback? Feel free to [reach out](/contact/)!*

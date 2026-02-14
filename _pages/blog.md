@@ -4,16 +4,18 @@ title: "技术博客"
 permalink: /blog/
 ---
 
-# 技术博客
+<div class="container">
+  <h1 class="page-title">Blog</h1>
 
-这里记录我的技术学习与生活思考。
-
-<ul>
-  {% for post in site.posts %}
-    <li>
-      <span style="font-size: 0.8em; color: #666;">{{ post.date | date: "%Y-%m-%d" }}</span>
-      &raquo; 
-      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-    </li>
-  {% endfor %}
-</ul>
+  <div class="post-list">
+    {% for post in site.posts %}
+      <a href="{{ post.url | relative_url }}" class="post-card">
+        <span class="post-card-date">{{ post.date | date: "%B %d, %Y" }}</span>
+        <h2 class="post-card-title">{{ post.title }}</h2>
+        <p class="post-card-excerpt">
+          {{ post.excerpt | strip_html | truncatewords: 30 }}
+        </p>
+      </a>
+    {% endfor %}
+  </div>
+</div>

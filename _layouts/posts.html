@@ -1,0 +1,35 @@
+---
+layout: default
+---
+
+<article class="container">
+  <header style="text-align: center; margin-bottom: 50px;">
+    <!-- 极简的日期显示 -->
+    <time style="color: #86868b; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+      {{ page.date | date: "%B %d, %Y" }}
+    </time>
+    
+    <!-- 大标题 -->
+    <h1 style="font-size: 40px; margin-top: 10px; line-height: 1.2;">{{ page.title }}</h1>
+    
+    <!-- 标签 (可选) -->
+    {% if page.tags %}
+      <div style="margin-top: 15px;">
+        {% for tag in page.tags %}
+          <span style="background: #f5f5f7; padding: 4px 12px; border-radius: 20px; font-size: 12px; color: #666; margin: 0 4px;">#{{ tag }}</span>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </header>
+
+  <!-- 正文区域 -->
+  <div class="post-content" style="font-size: 18px; line-height: 1.8; color: #333;">
+    {{ content }}
+  </div>
+
+  <!-- 简单的页脚导航 -->
+  <hr style="border: 0; border-top: 1px solid #eee; margin: 60px 0;">
+  <div style="text-align: center;">
+    <a href="/blog/" style="color: #0066cc; text-decoration: none; font-weight: 500;">← Back to Blog</a>
+  </div>
+</article>

@@ -2,146 +2,111 @@
 layout: default
 ---
 
-<div class="blog-container">
+<!-- Blog List Page - Compatible with jekyll-theme-primer -->
+<div class="container-lg px-3 my-5 markdown-body">
+  
   <!-- Blog Header -->
-  <div class="blog-header">
-    <h1 class="blog-title">{{ page.title | default: "Blog" }}</h1>
+  <div class="blog-header" style="text-align: center; margin-bottom: 60px;">
+    <h1 style="font-size: 48px; font-weight: 700; margin-bottom: 16px;">
+      {{ page.title | default: "Blog" }}
+    </h1>
     {% if page.description %}
-      <p class="blog-description">{{ page.description }}</p>
+      <p style="font-size: 20px; color: #6e6e73; max-width: 600px; margin: 0 auto;">
+        {{ page.description }}
+      </p>
     {% endif %}
   </div>
 
-  <!-- Filter Tags (Optional) -->
-  {% if site.tags.size > 0 %}
-  <div class="blog-filters">
-    <button class="filter-btn active" data-filter="all">All</button>
-    {% for tag in site.tags %}
-      <button class="filter-btn" data-filter="{{ tag[0] }}">{{ tag[0] }}</button>
-    {% endfor %}
-  </div>
-  {% endif %}
-
   <!-- Posts Grid -->
-  <div class="posts-grid">
+  <div class="posts-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; margin-bottom: 60px;">
     {% for post in site.posts %}
-      <article class="post-card" data-tags="{{ post.tags | join: ' ' }}">
-        <!-- Post Header -->
-        <div class="post-card-header">
-          <h2 class="post-title">
-            <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-          </h2>
-          <div class="post-meta">
-            <time datetime="{{ post.date | date_to_xmlschema }}">
-              {{ post.date | date: "%B %d, %Y" }}
-            </time>
-            {% if post.author %}
-              <span class="separator">•</span>
-              <span class="post-author">{{ post.author }}</span>
-            {% endif %}
-            {% if post.read_time %}
-              <span class="separator">•</span>
-              <span class="read-time">{{ post.read_time }} min read</span>
-            {% elsif content %}
-              {% assign words = post.content | number_of_words %}
-              {% assign read_time = words | divided_by: 200 %}
-              <span class="separator">•</span>
-              <span class="read-time">{{ read_time }} min read</span>
-            {% endif %}
-          </div>
-        </div>
+      <article class="post-card" style="background: #ffffff; border: 1px solid #e1e4e8; border-radius: 12px; overflow: hidden; transition: all 0.3s ease; display: flex; flex-direction: column;">
         
         <!-- Post Thumbnail -->
         {% if post.image %}
-          <div class="post-thumbnail">
+          <div class="post-thumbnail" style="width: 100%; aspect-ratio: 16 / 9; overflow: hidden;">
             <a href="{{ post.url | relative_url }}">
-              <img src="{{ post.image | relative_url }}" alt="{{ post.title }}" loading="lazy">
+              <img src="{{ post.image | relative_url }}" 
+                   alt="{{ post.title }}" 
+                   style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;"
+                   onmouseover="this.style.transform='scale(1.05)'"
+                   onmouseout="this.style.transform='scale(1)'">
             </a>
           </div>
         {% endif %}
         
-        <!-- Post Excerpt -->
-        <div class="post-excerpt">
-          {% if post.excerpt %}
-            {{ post.excerpt | strip_html | truncatewords: 50 }}
-          {% else %}
-            {{ post.content | strip_html | truncatewords: 50 }}
-          {% endif %}
-        </div>
-        
-        <!-- Post Footer -->
-        <div class="post-card-footer">
-          <a href="{{ post.url | relative_url }}" class="read-more">
-            Read More →
-          </a>
-          {% if post.tags.size > 0 %}
-            <div class="post-tags">
-              {% for tag in post.tags limit:3 %}
-                <span class="tag">{{ tag }}</span>
-              {% endfor %}
-            </div>
-          {% endif %}
+        <!-- Post Content -->
+        <div style="padding: 24px; flex-grow: 1; display: flex; flex-direction: column;">
+          
+          <!-- Post Title -->
+          <h2 style="margin: 0 0 12px; font-size: 22px; font-weight: 600; line-height: 1.3;">
+            <a href="{{ post.url | relative_url }}" style="color: #24292e; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#0366d6'" onmouseout="this.style.color='#24292e'">
+              {{ post.title }}
+            </a>
+          </h2>
+          
+          <!-- Post Meta -->
+          <div style="margin-bottom: 16px; font-size: 14px; color: #586069;">
+            <time datetime="{{ post.date | date_to_xmlschema }}">
+              {{ post.date | date: "%B %d, %Y" }}
+            </time>
+            {% if post.author %}
+              <span style="margin: 0 8px;">•</span>
+              <span>{{ post.author }}</span>
+            {% endif %}
+          </div>
+          
+          <!-- Post Excerpt -->
+          <div style="margin-bottom: 16px; font-size: 15px; line-height: 1.6; color: #586069; flex-grow: 1;">
+            {{ post.excerpt | strip_html | truncatewords: 30 }}
+          </div>
+          
+          <!-- Post Footer -->
+          <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px solid #e1e4e8;">
+            <a href="{{ post.url | relative_url }}" 
+               style="font-size: 15px; font-weight: 500; color: #0366d6; text-decoration: none; transition: color 0.2s ease;"
+               onmouseover="this.style.color='#0256c7'"
+               onmouseout="this.style.color='#0366d6'">
+              Read More →
+            </a>
+            
+            {% if post.tags.size > 0 %}
+              <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                {% for tag in post.tags limit:2 %}
+                  <span style="display: inline-block; padding: 4px 10px; background: #f6f8fa; border-radius: 12px; font-size: 12px; color: #586069;">
+                    {{ tag }}
+                  </span>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
         </div>
       </article>
     {% endfor %}
     
     <!-- Empty State -->
     {% if site.posts.size == 0 %}
-      <div class="empty-state">
-        <p>No posts yet. Check back soon!</p>
+      <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: #586069;">
+        <p style="font-size: 18px;">No posts yet. Check back soon!</p>
       </div>
     {% endif %}
   </div>
-
-  <!-- Pagination (Optional) -->
-  {% if paginator.total_pages > 1 %}
-  <nav class="pagination">
-    {% if paginator.previous_page %}
-      <a href="{{ paginator.previous_page_path | relative_url }}" class="pagination-btn prev">
-        ← Previous
-      </a>
-    {% endif %}
-    
-    <span class="pagination-info">
-      Page {{ paginator.page }} of {{ paginator.total_pages }}
-    </span>
-    
-    {% if paginator.next_page %}
-      <a href="{{ paginator.next_page_path | relative_url }}" class="pagination-btn next">
-        Next →
-      </a>
-    {% endif %}
-  </nav>
-  {% endif %}
 </div>
 
-<!-- Optional: Tag Filter JavaScript -->
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const postCards = document.querySelectorAll('.post-card');
+<!-- Responsive CSS -->
+<style>
+  @media (max-width: 768px) {
+    .blog-header h1 {
+      font-size: 36px !important;
+    }
     
-    filterButtons.forEach(button => {
-      button.addEventListener('click', function() {
-        const filter = this.getAttribute('data-filter');
-        
-        // Update active button
-        filterButtons.forEach(btn => btn.classList.remove('active'));
-        this.classList.add('active');
-        
-        // Filter posts
-        postCards.forEach(card => {
-          if (filter === 'all') {
-            card.style.display = 'flex';
-          } else {
-            const tags = card.getAttribute('data-tags');
-            if (tags.includes(filter)) {
-              card.style.display = 'flex';
-            } else {
-              card.style.display = 'none';
-            }
-          }
-        });
-      });
-    });
-  });
-</script>
+    .posts-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+  
+  .post-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-4px);
+  }
+</style>

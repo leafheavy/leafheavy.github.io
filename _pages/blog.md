@@ -1,16 +1,19 @@
 ---
-layout: archive
-permalink: /blog/
+layout: default
 title: "技术博客"
-author_profile: true
-header:
-  image: "/images/blog-header.jpg"  # 可选：给博客页加个背景图
+permalink: /blog/
 ---
 
-{% include base_path %}
+# 技术博客
 
 这里记录我的技术学习与生活思考。
 
-{% for post in site.posts %}
-  {% include archive-single.html %}
-{% endfor %}
+<ul>
+  {% for post in site.posts %}
+    <li>
+      <span style="font-size: 0.8em; color: #666;">{{ post.date | date: "%Y-%m-%d" }}</span>
+      &raquo; 
+      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+    </li>
+  {% endfor %}
+</ul>

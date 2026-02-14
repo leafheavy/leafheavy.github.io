@@ -1,127 +1,129 @@
 /* assets/css/apple-style.css */
 
+/* 定义变量，方便统一管理 */
 :root {
-  --bg-color: #fbfbfd; /* Apple 官网常用的极浅灰背景 */
-  --card-bg: #ffffff;
-  --text-primary: #1d1d1f; /* 接近黑色的深灰，比纯黑更柔和 */
-  --text-secondary: #86868b;
-  --accent-color: #0066cc; /* Apple 蓝 */
-  --radius: 18px;
-  --shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
-  --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --apple-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --apple-text: #1d1d1f;
+  --apple-gray: #86868b;
+  --apple-blue: #0066cc;
+  --apple-bg: #ffffff;
 }
 
-body {
-  font-family: var(--font-stack);
-  background-color: var(--bg-color);
-  color: var(--text-primary);
-  line-height: 1.65;
+/* --- 核心修复：只针对我们自定义的内容区域 --- */
+.apple-content {
+  font-family: var(--apple-font);
+  color: var(--apple-text);
+  line-height: 1.7; /* 增加行高，提升阅读舒适度 */
+  max-width: 100%;  /* 让它适应原主题的容器 */
   margin: 0;
-  -webkit-font-smoothing: antialiased; /* 让字体在 Mac 上更清晰 */
 }
 
-/* 布局容器 */
-.container {
-  max-width: 720px; /* 黄金阅读宽度 */
-  margin: 0 auto;
-  padding: 40px 20px;
-}
-
-/* 标题排版 */
-h1, h2, h3 {
-  font-weight: 600;
-  letter-spacing: -0.02em; /* 紧凑的字间距是 Apple 标题特征 */
-  margin-top: 1.5em;
-  margin-bottom: 0.8em;
-}
-
-h1.page-title {
-  font-size: 48px;
-  text-align: center;
-  margin-bottom: 60px;
-  color: #000;
-}
-
-/* 博客列表 - 卡片式设计 */
-.post-list {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-
-.post-card {
-  background: var(--card-bg);
-  border-radius: var(--radius);
-  padding: 30px;
-  box-shadow: var(--shadow);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  text-decoration: none;
+/* 博客列表卡片优化 */
+.apple-post-card {
   display: block;
-  border: 1px solid rgba(0,0,0,0.02);
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.08); /* 极细的边框 */
+  border-radius: 18px; /* Apple 圆角 */
+  padding: 24px;
+  margin-bottom: 24px;
+  text-decoration: none !important; /* 去掉下划线 */
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
 }
 
-.post-card:hover {
-  transform: scale(1.01); /* 极微小的放大 */
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+.apple-post-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+  border-color: rgba(0,0,0,0.0);
 }
 
-.post-card-date {
-  font-size: 13px;
+.apple-card-date {
+  font-size: 12px;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: var(--apple-gray);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 8px;
   display: block;
 }
 
-.post-card-title {
-  font-size: 24px;
+.apple-card-title {
+  font-size: 22px;
   font-weight: 700;
-  color: var(--text-primary);
-  margin: 0 0 10px 0;
+  color: #000;
+  margin: 0 0 8px 0;
   line-height: 1.3;
 }
 
-.post-card-excerpt {
-  color: var(--text-secondary);
-  font-size: 16px;
+.apple-card-excerpt {
+  font-size: 15px;
+  color: var(--apple-gray);
   margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* 只显示两行 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-/* 文章详情页优化 */
-.post-content img {
+/* --- 文章详情页优化 (Typography) --- */
+.apple-article-header {
+  margin-bottom: 40px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 30px;
+}
+
+.apple-article-title {
+  font-size: 36px; /* 大标题 */
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  margin-bottom: 15px;
+}
+
+.apple-article-meta {
+  font-size: 14px;
+  color: var(--apple-gray);
+}
+
+/* 正文排版 */
+.apple-article-body h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-top: 40px;
+  margin-bottom: 15px;
+  letter-spacing: -0.01em;
+}
+
+.apple-article-body h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 30px;
+}
+
+.apple-article-body p {
+  margin-bottom: 20px;
+  font-size: 17px; /* 正文字号略大，适合阅读 */
+}
+
+/* 图片优化 */
+.apple-article-body img {
   max-width: 100%;
   border-radius: 12px;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.1); /* 图片悬浮感 */
-  margin: 30px 0;
-}
-
-.post-content blockquote {
-  border-left: 4px solid var(--accent-color);
-  margin: 0;
-  padding-left: 20px;
-  color: var(--text-secondary);
-  font-style: italic;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08); /* 悬浮感 */
+  margin: 20px 0;
+  display: block;
 }
 
 /* 代码块优化 */
-pre {
-  background: #f5f5f7; /* 浅灰背景 */
+.apple-article-body pre {
+  background: #f5f5f7;
   border-radius: 12px;
-  padding: 20px;
+  padding: 16px;
+  font-size: 14px;
   overflow-x: auto;
   border: 1px solid rgba(0,0,0,0.03);
 }
 
-/* 导航栏简化 */
-.nav-link {
-  color: var(--text-secondary);
-  text-decoration: none;
-  margin-right: 20px;
-  font-size: 14px;
-  transition: color 0.2s;
-}
-.nav-link:hover {
-  color: var(--text-primary);
+.apple-article-body code {
+  font-family: "SF Mono", Menlo, monospace;
 }

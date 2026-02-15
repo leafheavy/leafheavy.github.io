@@ -1,0 +1,47 @@
+---
+layout: default 
+---
+<!-- 
+  Layout 继承逻辑：
+  Post (本文) -> Default (包含侧边栏逻辑的主题布局)
+-->
+
+{% if page.author_profile or layout.author_profile or page.sidebar %}
+  <!-- 这里的逻辑是为了确保在文章页也能强制开启侧边栏 -->
+  {% assign author_profile = true %}
+{% endif %}
+
+<!-- 引入样式 -->
+<link rel="stylesheet" href="/assets/css/apple-style-for-blog.css">
+
+<!-- 文章主体容器 -->
+<article class="apple-content" style="padding: 20px 0;">
+  
+  <!-- 1. 文章头部 -->
+  <header class="apple-article-header">
+    <h1 class="apple-article-title">{{ page.title }}</h1>
+    <div class="apple-article-meta">
+      <time datetime="{{ page.date | date_to_xmlschema }}">
+        {{ page.date | date: "%B %d, %Y" }}
+      </time>
+      {% if page.categories %}
+        <span style="margin: 0 10px;">•</span>
+        <span>{{ page.categories | join: ", " }}</span>
+      {% endif %}
+    </div>
+  </header>
+
+  <!-- 2. 正文内容 -->
+  <div class="apple-article-body">
+    {{ content }}
+  </div>
+
+  <!-- 3. 简单的底部导航 -->
+  <hr style="border: 0; border-top: 1px solid #eee; margin: 50px 0;">
+  <div>
+    <a href="/blog/" style="color: #0066cc; text-decoration: none; font-weight: 500;">
+      ← Back to Blog
+    </a>
+  </div>
+
+</article>

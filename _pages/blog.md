@@ -1,16 +1,24 @@
 ---
-layout: blog
-title: Blog
+layout: default 
+title: "Blog"
 permalink: /blog/
-description: Thoughts, insights, and tutorials on technology, research, and life
+author_profile: true  # 关键！这一行保证了左侧头像和导航栏的显示
 ---
 
-<!-- This page will automatically display all blog posts using the blog.html layout -->
-<!-- No additional content needed here unless you want to add custom sections -->
+<!-- 引入我们的样式 -->
+<link rel="stylesheet" href="/assets/css/apple-style-for-blog.css">
 
-<!-- Optional: Add custom content above the blog posts -->
-<!-- 
-<div class="blog-intro">
-  <p>Welcome to my blog! Here I share my thoughts on various topics including machine learning, web development, and academic research.</p>
+<div class="apple-content">
+  <!-- 列表容器 -->
+  <div style="margin-top: 20px;">
+    {% for post in site.posts %}
+      <a href="{{ post.url | relative_url }}" class="apple-post-card">
+        <span class="apple-card-date">{{ post.date | date: "%B %d, %Y" }}</span>
+        <h2 class="apple-card-title">{{ post.title }}</h2>
+        <p class="apple-card-excerpt">
+          {{ post.excerpt | strip_html | truncatewords: 30 }}
+        </p>
+      </a>
+    {% endfor %}
+  </div>
 </div>
--->

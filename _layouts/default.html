@@ -1,113 +1,34 @@
-<!DOCTYPE html>
-<html lang="{{ site.lang | default: "en-US" }}">
+---
+layout: compress
+---
+
+<!doctype html>
+<html lang="en" class="no-js">
   <head>
     {% include head.html %}
+    {% include head/custom.html %}
+    <link rel="stylesheet" href="/assets/css/apple-style-for-blog.css">
   </head>
-  
+
   <body>
-    <!-- Site Header (Navigation) -->
-    {% include header.html %}
+
+    {% include browser-upgrade.html %}
+    {% include masthead.html %}
+
+    <div id="main" role="main">
+      {% include sidebar.html %}
     
-    <!-- Main Content Wrapper -->
-    <main class="page-wrapper" role="main">
-      <div class="content-container">
-        {{ content }}
-      </div>
-    </main>
-    
-    <!-- Site Footer -->
-    {% include footer.html %}
-    
-    <!-- Optional: Back to Top Button -->
-    <button id="back-to-top" class="back-to-top" aria-label="Back to top">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <polyline points="18 15 12 9 6 15"></polyline>
-      </svg>
-    </button>
+      <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+        {% if page.title %}<meta itemprop="headline" content="{{ page.title | markdownify | strip_html | strip_newlines | escape_once }}">{% endif %}
+        <div class="page__inner-wrap">
+          <section class="page__content" itemprop="text">
+            {{ content }}
+          </section>
+        </div>
+      </article>
+    </div>
+
+    {% include scripts.html %}
+
   </body>
 </html>
-
-<style>
-  /* Global Page Styles */
-  .page-wrapper {
-    min-height: calc(100vh - 64px); /* 64px is header height */
-    padding-top: 0;
-  }
-
-  .content-container {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  /* Back to Top Button */
-  .back-to-top {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 48px;
-    height: 48px;
-    background: #0066cc;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 999;
-  }
-
-  .back-to-top:hover {
-    background: #0077ed;
-    transform: translateY(-4px);
-    box-shadow: 0 6px 16px rgba(0, 102, 204, 0.4);
-  }
-
-  .back-to-top.show {
-    display: flex;
-  }
-
-  @media (max-width: 768px) {
-    .back-to-top {
-      bottom: 20px;
-      right: 20px;
-      width: 44px;
-      height: 44px;
-    }
-  }
-
-  /* Dark Mode */
-  @media (prefers-color-scheme: dark) {
-    .back-to-top {
-      background: #2997ff;
-    }
-
-    .back-to-top:hover {
-      background: #409cff;
-    }
-  }
-</style>
-
-<script>
-  // Back to Top Button Functionality
-  (function() {
-    const backToTopButton = document.getElementById('back-to-top');
-    
-    window.addEventListener('scroll', () => {
-      if (window.pageYOffset > 300) {
-        backToTopButton.classList.add('show');
-      } else {
-        backToTopButton.classList.remove('show');
-      }
-    });
-    
-    backToTopButton.addEventListener('click', () => {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    });
-  })();
-</script>

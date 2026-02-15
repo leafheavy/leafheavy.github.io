@@ -15,8 +15,9 @@ layout: compress
     {% include browser-upgrade.html %}
     {% include masthead.html %}
 
-    <div id="main" role="main"{% if page.layout == 'posts' %} class="main--post"{% endif %}>
-      {% unless page.layout == 'posts' %}
+    {% assign is_post_page = page.collection == 'posts' or page.layout == 'posts' %}
+    <div id="main" role="main"{% if is_post_page %} class="main--post"{% endif %}>
+      {% unless is_post_page %}
         {% include sidebar.html %}
       {% endunless %}
     

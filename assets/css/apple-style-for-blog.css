@@ -448,6 +448,22 @@
   font-size: 0.9em;
 }
 
+
+.apple-article-body .apple-equation-block {
+  position: relative;
+  padding-right: 3.2em;
+}
+
+.apple-article-body .apple-equation-number {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7280;
+  font-size: 0.9em;
+  font-family: var(--apple-font);
+}
+
 @media (max-width: 768px) {
   .apple-article-title {
     font-size: 30px;

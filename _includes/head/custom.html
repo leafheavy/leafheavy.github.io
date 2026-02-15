@@ -10,6 +10,29 @@
 <link rel="stylesheet" href="assets/css/academicons.css"/>
 
 <script>
+  function applyAppleEquationNumbers() {
+    var blocks = document.querySelectorAll('.apple-article-body mjx-container[display="true"]');
+    var counter = 0;
+
+    blocks.forEach(function (block) {
+      var hasMathJaxTag = block.querySelector('mjx-tag') || block.querySelector('.mjx-tag');
+      block.classList.add('apple-equation-block');
+
+      if (hasMathJaxTag) {
+        return;
+      }
+
+      counter += 1;
+      var numberEl = block.querySelector('.apple-equation-number');
+      if (!numberEl) {
+        numberEl = document.createElement('span');
+        numberEl.className = 'apple-equation-number';
+        block.appendChild(numberEl);
+      }
+      numberEl.textContent = '(' + counter + ')';
+    });
+  }
+
   window.MathJax = {
     tex: {
       inlineMath: [['$', '$'], ['\\(', '\\)']],
@@ -20,8 +43,23 @@
     },
     options: {
       skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    startup: {
+      pageReady: function () {
+        return MathJax.startup.defaultPageReady().then(function () {
+          applyAppleEquationNumbers();
+        });
+      }
     }
   };
+
+  document.addEventListener('DOMContentLoaded', function () {
+    if (window.MathJax && MathJax.typesetPromise) {
+      MathJax.typesetPromise().then(function () {
+        applyAppleEquationNumbers();
+      });
+    }
+  });
 </script>
 <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 

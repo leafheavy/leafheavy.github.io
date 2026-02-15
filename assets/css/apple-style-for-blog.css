@@ -127,3 +127,38 @@
 .apple-article-body code {
   font-family: "SF Mono", Menlo, monospace;
 }
+
+/* --- 需求 2 核心修复：强制所有页面导航栏样式统一 --- */
+
+/* 1. 强制导航栏始终保持 Sticky 定位，与首页逻辑一致 */
+.masthead {
+  position: -webkit-sticky !important;
+  position: sticky !important;
+  top: 0;
+  z-index: 1000;
+  /* 使用高斯模糊实现 Apple 典型的磨砂玻璃感 */
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: saturate(180%) blur(20px) !important;
+  -webkit-backdrop-filter: saturate(180%) blur(20px) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 2. 统一导航栏高度和内边距，防止跳转时产生“跳动感” */
+.masthead__inner-wrap {
+  padding: 0.5rem 1rem !important;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* 3. 确保具体博客内容页（Single Layout）的容器不遮挡导航栏 */
+.layout--single .initial-content, 
+.layout--archive .initial-content {
+  margin-top: 0 !important;
+}
+
+/* 4. 自动适配：将你的 Apple 字体应用到原主题的导航栏链接上 */
+.masthead a {
+  font-family: var(--apple-font) !important;
+  color: var(--apple-text) !important;
+  font-weight: 500;
+}

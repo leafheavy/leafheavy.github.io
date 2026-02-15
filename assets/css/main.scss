@@ -107,3 +107,124 @@ h1:before, .anchor:before {
     background-color: #00369f;
     font-size: .8em;
 }
+
+/* ==========================================================================
+   Apple Design System & Navigation Consistency
+   ========================================================================== */
+
+:root {
+  --apple-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --apple-text: #1d1d1f;
+  --apple-gray: #86868b;
+  --apple-blue: #0066cc;
+  --apple-bg: #ffffff;
+}
+
+/* 1. 导航栏核心修复：强制全站统一 (Apple Glassmorphism Style) */
+.masthead {
+  position: -webkit-sticky !important;
+  position: sticky !important;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  /* 磨砂玻璃效果 */
+  background-color: rgba(255, 255, 255, 0.72) !important; 
+  backdrop-filter: saturate(180%) blur(20px) !important;
+  -webkit-backdrop-filter: saturate(180%) blur(20px) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  transition: background-color 0.5s cubic-bezier(0.28, 0.11, 0.32, 1);
+}
+
+.masthead__inner-wrap {
+  max-width: 1200px !important;
+  margin: 0 auto;
+  padding: 0.8rem 1rem !important;
+}
+
+.masthead a {
+  font-family: var(--apple-font) !important;
+  color: var(--apple-text) !important;
+  font-weight: 500 !important;
+  opacity: 0.88;
+  &:hover {
+    opacity: 1;
+    color: var(--apple-blue) !important;
+  }
+}
+
+/* 2. 布局修复：防止内容被吸顶导航栏遮挡或跳动 */
+.initial-content {
+  margin-top: 0 !important;
+}
+
+/* 3. Blog 列表卡片 (Apple Card Style) */
+.apple-content {
+  font-family: var(--apple-font);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.apple-post-card {
+  display: block;
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 20px; /* 更圆润的 Apple 风格 */
+  padding: 30px;
+  margin-bottom: 24px;
+  text-decoration: none !important;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  
+  &:hover {
+    transform: scale(1.01);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+    border-color: transparent;
+  }
+}
+
+.apple-card-date {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--apple-gray);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.apple-card-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #000;
+  margin: 0 0 10px 0;
+}
+
+.apple-card-excerpt {
+  font-size: 16px;
+  color: var(--apple-gray);
+  line-height: 1.5;
+}
+
+/* 4. 具体文章页排版优化 (Typography) */
+/* 自动应用到主题的文章容器 */
+.page__content {
+  font-family: var(--apple-font);
+  color: var(--apple-text);
+  
+  h1, h2, h3 { 
+    letter-spacing: -0.02em; 
+    font-weight: 700;
+  }
+  
+  p { line-height: 1.6; font-size: 17px; }
+  
+  img {
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  }
+
+  pre {
+    background: #f5f5f7 !important;
+    border-radius: 12px;
+    border: none;
+  }
+}

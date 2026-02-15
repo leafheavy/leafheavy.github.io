@@ -1,15 +1,14 @@
 ---
-layout: archive   # 这里的 archive 是原主题为了支持侧边栏而设计的布局
 title: "Blog"
+layout: single
 permalink: /blog/
-author_profile: true  # 关键！这一行保证了左侧头像和导航栏的显示
+author_profile: true
+header:
+  overlay_color: "#000"
+  overlay_filter: "0.5"
 ---
 
-<!-- 引入我们的样式 -->
-<link rel="stylesheet" href="/assets/css/apple-style-for-blog.css">
-
 <div class="apple-content">
-  <!-- 列表容器 -->
   <div style="margin-top: 20px;">
     {% for post in site.posts %}
       <a href="{{ post.url | relative_url }}" class="apple-post-card">

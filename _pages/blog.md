@@ -8,8 +8,16 @@ author_profile: true
 <!-- Hero 区 -->
 <section class="apple-blog-hero">
   <div class="apple-hero-inner">
-    <h1 class="apple-hero-title">Blog 主页</h1>
-    <p class="apple-hero-sub">技术·实验·笔记 — 精选文章按时间倒序排列</p>
+    <div class="apple-hero-left">
+      <img src="{{ '/images/Personal_image1.jpg' | relative_url }}"
+           alt="Personal image"
+           class="apple-hero-avatar"
+           loading="lazy">
+      <div class="apple-hero-text">
+        <h1 class="apple-hero-title">Blog 主页</h1>
+        <p class="apple-hero-sub">技术·实验·笔记 — 精选文章按时间倒序排列</p>
+      </div>
+    </div>
   </div>
 </section>
 

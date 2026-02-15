@@ -218,4 +218,89 @@
   }
 }
 
-/* 若你仍使用原来的单循环输出，包装 container 类 (在 blog.md 模板内) */
+/* ===============================
+   Hero: Avatar 布局 & 头像样式
+   =============================== */
+
+.apple-hero-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.apple-hero-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  border: 2px solid rgba(255,255,255,0.9);
+  flex-shrink: 0;
+}
+
+/* 文字部分紧邻头像 */
+.apple-hero-text {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 小屏回落：头像在上、文字在下 */
+@media (max-width: 720px) {
+  .apple-hero-inner { padding: 0 1rem; }
+  .apple-hero-left { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .apple-hero-avatar { width: 72px; height: 72px; }
+  .apple-hero-title { font-size: 28px; }
+}
+
+/* ===============================
+   强力隐藏：右上角无用按钮 / site-actions / header buttons
+   （覆盖常见类名与变体，最小侵入、CSS 层面隐藏）
+   =============================== */
+
+/* 针对 header 内部 action 按钮 */
+.masthead .site-actions,
+.masthead .header-actions,
+.site-header .site-actions,
+.site-header .header-actions,
+.header .site-actions,
+.header .header-actions,
+.site-actions,
+.header-actions,
+.header .actions,
+.masthead .actions,
+.site-header .actions {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* 针对可能的单个按钮类或图标类（覆盖各种主题写法） */
+.action-button,
+.action-btn,
+.btn--top-right,
+.header-cta,
+.site-cta,
+.icon-button,
+.icon--share,
+.btn-share,
+.share-button,
+.share-btn,
+.toc-toggle,
+.toc-button,
+.toc__toggle,
+.anchor-toc {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* 额外保险：删除定位在右上角的伪元素/容器 */
+[role="toolbar"],
+[aria-label="Actions"],
+#site-actions,
+#header-actions,
+#site-cta {
+  display: none !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}

@@ -24,9 +24,14 @@ $ E = mc^2 $
 ```
 
 - 块级公式:
+
 $$
 J(\theta) = \frac{1}{2m} \sum_{i=1}^m (h_\theta(x^{(i)}) - y^{(i)})^2
 $$
+
+\begin{align}
+J(\theta) = \frac{1}{2m} \sum_{i=1}^m (h_\theta(x^{(i)}) - y^{(i)})^2
+\end{align}
 
 ```markdown
 $$ J(\theta) = \frac{1}{2m} \sum_{i=1}^m (h_\theta(x^{(i)}) - y^{(i)})^2 $$

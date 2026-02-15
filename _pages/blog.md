@@ -3,9 +3,6 @@ layout: archive   # 这里的 archive 是原主题为了支持侧边栏而设计
 title: "Blog"
 permalink: /blog/
 author_profile: true  # 关键！这一行保证了左侧头像和导航栏的显示
-header:
-  overlay_color: "#000" # 确保头部有颜色，防止文字和背景混淆
-  overlay_filter: "0.5"
 ---
 
 <!-- 引入我们的样式 -->

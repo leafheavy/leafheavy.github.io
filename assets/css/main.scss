@@ -107,3 +107,68 @@ h1:before, .anchor:before {
     background-color: #00369f;
     font-size: .8em;
 }
+
+/* ==========================================================================
+   Apple Design System - Navigation Optimization
+   Role: Apple Frontend Engineer
+   ========================================================================== */
+
+/* 1. 容器：实现 Apple 经典的顶部磨砂玻璃效果 + 粘性定位 */
+.masthead {
+  position: -webkit-sticky !important; /* Safari 兼容 */
+  position: sticky !important;
+  top: 0;
+  z-index: 1000; /* 确保在所有内容之上 */
+  width: 100%;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08); /* 极细的分割线 */
+  background-color: rgba(255, 255, 255, 0.72) !important; /* 72% 透明度的白色背景 */
+  backdrop-filter: saturate(180%) blur(20px) !important; /* 核心：高饱和度磨砂玻璃 */
+  -webkit-backdrop-filter: saturate(180%) blur(20px) !important;
+  box-shadow: none !important; /* 去除原本厚重的阴影，保持扁平 */
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* 2. 布局：统一内边距，模仿 Apple 官网的呼吸感 */
+.masthead .masthead__inner-wrap {
+  max-width: 1200px; /* 限制最大宽度，防止在大屏上过宽 */
+  margin: 0 auto;
+  padding: 0.8rem 1rem; /* 调整高度，使其更紧凑精致 */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 3. 字体：使用 Apple 系统字体栈 (San Francisco) */
+.masthead a, 
+.masthead .site-title {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  color: #1d1d1f !important; /* Apple 官方深灰色 */
+  font-weight: 500; /* 中等字重 */
+  letter-spacing: -0.01em; /* 稍微收紧字间距 */
+  text-decoration: none;
+}
+
+/* 4. 交互：鼠标悬停效果 */
+.masthead a:hover, 
+.masthead .site-title:hover {
+  color: #0071e3 !important; /* Apple 官方交互蓝 */
+  opacity: 1;
+}
+
+/* 5. 修复具体博客内容页 (Post) 导航栏样式不一致的问题 */
+/* 强制覆盖所有页面（包括 Archive, Single Post）的默认 Masthead 行为 */
+body {
+  padding-top: 0 !important; /* 防止由于 fixed 定位导致的内容遮挡，我们用 sticky 不需要这个 */
+}
+
+/* 如果当前主题在 Post 页面隐藏了 masthead，强制显示 */
+.layout--single .masthead,
+.layout--archive .masthead {
+  display: block !important;
+  visibility: visible !important;
+}
+
+/* 移动端菜单按钮优化 */
+.greedy-nav .nav-selector {
+  color: #1d1d1f !important;
+}

@@ -475,3 +475,24 @@
     line-height: 1.8;
   }
 }
+
+/* ===============================
+   Code block readability fixes
+   =============================== */
+.apple-article-body div.highlighter-rouge:before,
+.apple-article-body figure.highlight:before {
+  content: none !important;
+  display: none !important;
+}
+
+.apple-article-body div.highlighter-rouge .highlight,
+.apple-article-body figure.highlight .highlight,
+.apple-article-body pre,
+.apple-article-body pre code {
+  font-size: 1em !important;
+  line-height: 1.8;
+}
+
+.apple-article-body pre code[class*="language-" i] {
+  font-size: 1em !important;
+}

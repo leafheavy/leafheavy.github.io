@@ -33,6 +33,25 @@
     });
   }
 
+  function normalizeCodeLanguageClasses() {
+    var nodes = document.querySelectorAll('pre code[class], .highlighter-rouge code[class], figure.highlight code[class]');
+
+    nodes.forEach(function (node) {
+      var normalized = [];
+      node.classList.forEach(function (className) {
+        if (/^language-/i.test(className)) {
+          normalized.push(className.toLowerCase());
+        }
+      });
+
+      normalized.forEach(function (className) {
+        if (!node.classList.contains(className)) {
+          node.classList.add(className);
+        }
+      });
+    });
+  }
+
   window.MathJax = {
     tex: {
       inlineMath: [['$', '$'], ['\\(', '\\)']],
@@ -54,6 +73,8 @@
   };
 
   document.addEventListener('DOMContentLoaded', function () {
+    normalizeCodeLanguageClasses();
+
     if (window.MathJax && MathJax.typesetPromise) {
       MathJax.typesetPromise().then(function () {
         applyAppleEquationNumbers();

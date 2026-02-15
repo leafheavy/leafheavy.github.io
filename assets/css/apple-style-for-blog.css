@@ -322,13 +322,17 @@
 #main.main--post .page {
   float: none;
   width: 100%;
+  max-width: 100%;
+  margin-left: 0;
   margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 #main.main--post .page__inner-wrap {
   float: none;
   width: 100%;
-  max-width: 920px;
+  max-width: 860px;
   margin: 0 auto;
 }
 
@@ -353,8 +357,12 @@
 
 .apple-article-body {
   font-size: 18px;
-  line-height: 1.9;
+  line-height: 1.85;
   color: #1f2937;
+}
+
+.apple-article-body > :first-child {
+  margin-top: 0;
 }
 
 .apple-article-body p,
@@ -369,6 +377,15 @@
 .apple-article-body h4 {
   margin-top: 1.8em;
   margin-bottom: 0.55em;
+  line-height: 1.35;
+}
+
+.apple-article-body h2 {
+  font-size: 1.7em;
+}
+
+.apple-article-body h3 {
+  font-size: 1.35em;
 }
 
 .apple-article-body a {
@@ -392,8 +409,53 @@
   font-size: 0.9em;
 }
 
+.apple-article-body pre {
+  margin: 1.5em 0;
+  border-radius: 14px;
+  padding: 1.1em 1.15em;
+}
+
+.apple-article-body ul,
+.apple-article-body ol {
+  padding-left: 1.35em;
+}
+
+.apple-article-body hr {
+  margin: 2.25em 0;
+  border: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
 .apple-article-body .MathJax_Display {
   display: block !important;
   margin: 1.25em 0 !important;
   overflow-x: auto;
+}
+
+.apple-article-body mjx-container[display="true"] {
+  display: block;
+  margin: 1.4em 0 !important;
+  padding: 0.2em 0;
+  overflow-x: auto;
+}
+
+.apple-article-body mjx-container[display="true"] mjx-math {
+  justify-content: center;
+}
+
+.apple-article-body mjx-container[display="true"] mjx-tag {
+  color: #6b7280;
+  font-size: 0.9em;
+}
+
+@media (max-width: 768px) {
+  .apple-article-title {
+    font-size: 30px;
+    line-height: 1.2;
+  }
+
+  .apple-article-body {
+    font-size: 17px;
+    line-height: 1.8;
+  }
 }

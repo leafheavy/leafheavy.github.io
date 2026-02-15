@@ -127,3 +127,95 @@
 .apple-article-body code {
   font-family: "SF Mono", Menlo, monospace;
 }
+
+/* ============================
+   移除 / 隐藏单篇页面右侧的浮动目录 / 导航按钮（最小覆盖）
+   ============================ */
+/* 常见的 TOC / floating nav 选择器集合（尽量覆盖所有变体） */
+.table-of-contents,
+.toc,
+.toc-toggle,
+.toc-button,
+.toc__toggle,
+.js-toc,
+.sidebar__toc,
+.sidebar-toc,
+.article-toc,
+.float-toc,
+.float-nav,
+.post-toc,
+#TableOfContents,
+#toc {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  height: 0 !important;
+  width: 0 !important;
+}
+
+/* 有些主题用固定按钮触发侧边栏，这里也一并隐藏 */
+.button--toc,
+.anchor-toc,
+.js-toc-toggle,
+.js-toc-button {
+  display: none !important;
+}
+
+/* ============================
+   Blog 主页：Hero + 内容容器布局
+   ============================ */
+
+.apple-blog-hero {
+  background: linear-gradient(90deg, rgba(240,246,255,1), rgba(255,255,255,0.92));
+  padding: 36px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+
+.apple-hero-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.apple-hero-title {
+  font-family: var(--apple-font);
+  font-size: 44px;
+  font-weight: 700;
+  color: var(--apple-blue);
+  margin: 0;
+  line-height: 1;
+}
+
+.apple-hero-sub {
+  font-family: var(--apple-font);
+  font-size: 16px;
+  color: var(--apple-gray);
+  margin: 0;
+  opacity: 0.95;
+}
+
+/* 内容容器居中与宽度控制 */
+.apple-content {
+  max-width: 980px;
+  margin: 28px auto;
+  padding: 0 1.25rem 48px;
+  box-sizing: border-box;
+}
+
+/* 卡片在大屏改为两列（可选），小屏回落为单列 */
+@media (min-width: 980px) {
+  .apple-post-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px 28px;
+    align-items: start;
+  }
+  .apple-post-card {
+    margin-bottom: 0; /* grid 已处理间距 */
+  }
+}
+
+/* 若你仍使用原来的单循环输出，包装 container 类 (在 blog.md 模板内) */

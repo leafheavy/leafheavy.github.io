@@ -1,0 +1,15 @@
+---
+layout: default
+---
+
+{%- comment -%}
+  Minimal, non-invasive archive layout.
+  Inherits from _layouts/default.html so masthead/navigation are preserved.
+  Keeps content rendering simple so your existing blog.md (layout: archive) works.
+{%- endcomment -%}
+
+<main id="site-main" class="archive-page" role="main">
+  <div class="archive-container" style="width:100%;">
+    {{ content }}
+  </div>
+</main>

@@ -107,3 +107,115 @@ h1:before, .anchor:before {
     background-color: #00369f;
     font-size: .8em;
 }
+
+/* ================================
+   Global Masthead Consistency Fix
+   (Apple-style-for-blog minimal refinement)
+================================ */
+
+.masthead {
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  background-color: rgba(255, 255, 255, 0.72);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* 强制所有 layout 下导航一致 */
+.layout--single .masthead,
+.layout--page .masthead,
+.layout--home .masthead {
+  background-color: rgba(255, 255, 255, 0.72);
+}
+
+/* Navigation text refinement */
+.masthead__menu-item a {
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #1d1d1f;
+}
+
+.masthead__menu-item a:hover {
+  color: #000;
+}
+
+/* ==========================
+   Navigation / Masthead consistency overrides
+   最小覆盖：确保列表页与文章页导航外观一致
+   ========================== */
+
+/* 通用 header/masthead 覆盖 */
+.masthead,
+.site-header,
+.header-nav,
+.site-nav,
+.topbar,
+.header {
+  background-color: rgba(255,255,255,0.72);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+}
+
+/* 在不同 layout 下显式保持一致（覆盖主题特定选择器） */
+.layout--single .masthead,
+.layout--page .masthead,
+.layout--home .masthead,
+.layout--archive .masthead,
+.layout--collection .masthead {
+  background-color: rgba(255,255,255,0.72);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  backdrop-filter: saturate(180%) blur(12px);
+}
+
+/* 导航项的视觉细化（更接近 Apple 的字重与间距） */
+.masthead__menu-item a,
+.site-nav a,
+.header-nav a,
+.nav a,
+.navigation a {
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--apple-text);
+  text-transform: none;
+  transition: color .18s ease, transform .18s ease;
+}
+
+/* 悬浮微交互（轻抬起） */
+.masthead__menu-item a:hover,
+.site-nav a:hover,
+.header-nav a:hover,
+.nav a:hover {
+  color: #000;
+  transform: translateY(-1px);
+}
+
+/* 品牌区留白微调 */
+.masthead__brand,
+.site-header .brand,
+.header .brand {
+  padding-left: 0.6rem;
+  padding-right: 0.6rem;
+}
+
+/* 最小防护：保证 z-index 与 sticky 覆盖其他元素 */
+.masthead,
+.site-header {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* 在窄屏上禁用 backdrop-filter（性能与视觉退让） */
+@media (max-width: 720px) {
+  .masthead,
+  .site-header,
+  .header-nav,
+  .site-nav {
+    background-color: rgba(255,255,255,0.95);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+}

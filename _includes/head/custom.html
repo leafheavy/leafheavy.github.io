@@ -35,20 +35,34 @@
 
   function normalizeCodeLanguageClasses() {
     var nodes = document.querySelectorAll('pre[class], code[class], div[class], figure[class]');
+    var knownLanguages = ['latex', 'python'];
 
     nodes.forEach(function (node) {
       var classNames = Array.from(node.classList);
       classNames.forEach(function (className) {
-        if (!/^language-/i.test(className)) {
+        var lowerClass = className.toLowerCase();
+        var languageMatch = className.match(/^language-(.+)$/i);
+
+        if (languageMatch) {
+          var normalizedLanguageClass = 'language-' + languageMatch[1].toLowerCase();
+          if (normalizedLanguageClass !== className) {
+            node.classList.remove(className);
+          }
+          if (!node.classList.contains(normalizedLanguageClass)) {
+            node.classList.add(normalizedLanguageClass);
+          }
           return;
         }
-
-        var normalized = className.toLowerCase();
-        if (normalized !== className) {
-          node.classList.remove(className);
-        }
-      if (!node.classList.contains(normalized)) {
-          node.classList.add(normalized);
+        if (knownLanguages.indexOf(lowerClass) !== -1) {
+          if (lowerClass !== className) {
+            node.classList.remove(className);
+          }
+          if (!node.classList.contains(lowerClass)) {
+            node.classList.add(lowerClass);
+          }
+          if (!node.classList.contains('language-' + lowerClass)) {
+            node.classList.add('language-' + lowerClass);
+          }
         }
       });
     });

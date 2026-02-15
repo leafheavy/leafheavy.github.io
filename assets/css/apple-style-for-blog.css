@@ -315,3 +315,85 @@
   pointer-events: none !important;
   visibility: hidden !important;
 }
+
+/* ===============================
+   Post detail page: remove sidebar layout gap and center content
+   =============================== */
+#main.main--post .page {
+  float: none;
+  width: 100%;
+  margin-right: 0;
+}
+
+#main.main--post .page__inner-wrap {
+  float: none;
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+#main.main--post .page__content {
+  float: none;
+  width: 100%;
+}
+
+/* ===============================
+   Post detail page typography polish
+   =============================== */
+.apple-article-header {
+  margin-bottom: 36px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.apple-article-title {
+  margin-bottom: 10px;
+  letter-spacing: -0.015em;
+}
+
+.apple-article-body {
+  font-size: 18px;
+  line-height: 1.9;
+  color: #1f2937;
+}
+
+.apple-article-body p,
+.apple-article-body ul,
+.apple-article-body ol,
+.apple-article-body blockquote {
+  margin: 1.1em 0;
+}
+
+.apple-article-body h2,
+.apple-article-body h3,
+.apple-article-body h4 {
+  margin-top: 1.8em;
+  margin-bottom: 0.55em;
+}
+
+.apple-article-body a {
+  color: var(--apple-blue);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.apple-article-body blockquote {
+  margin-left: 0;
+  padding: 0.8em 1em;
+  border-left: 4px solid rgba(0, 102, 204, 0.28);
+  background: #f7fafc;
+  border-radius: 0 10px 10px 0;
+}
+
+.apple-article-body :not(pre) > code {
+  background: #f2f4f7;
+  border-radius: 6px;
+  padding: 0.1em 0.35em;
+  font-size: 0.9em;
+}
+
+.apple-article-body .MathJax_Display {
+  display: block !important;
+  margin: 1.25em 0 !important;
+  overflow-x: auto;
+}

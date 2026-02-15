@@ -34,19 +34,21 @@
   }
 
   function normalizeCodeLanguageClasses() {
-    var nodes = document.querySelectorAll('pre code[class], .highlighter-rouge code[class], figure.highlight code[class]');
+    var nodes = document.querySelectorAll('pre[class], code[class], div[class], figure[class]');
 
     nodes.forEach(function (node) {
-      var normalized = [];
-      node.classList.forEach(function (className) {
-        if (/^language-/i.test(className)) {
-          normalized.push(className.toLowerCase());
+      var classNames = Array.from(node.classList);
+      classNames.forEach(function (className) {
+        if (!/^language-/i.test(className)) {
+          return;
         }
-      });
 
-      normalized.forEach(function (className) {
-        if (!node.classList.contains(className)) {
-          node.classList.add(className);
+        var normalized = className.toLowerCase();
+        if (normalized !== className) {
+          node.classList.remove(className);
+        }
+      if (!node.classList.contains(normalized)) {
+          node.classList.add(normalized);
         }
       });
     });

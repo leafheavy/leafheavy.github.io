@@ -9,11 +9,6 @@
 <meta name="theme-color" content="#ffffff">
 <link rel="stylesheet" href="{{ "/assets/css/academicons.css" | relative_url }}"/>
 
-{% assign is_post_detail_page = false %}
-{% if page.collection == 'posts' or page.layout == 'posts' %}
-  {% assign is_post_detail_page = true %}
-{% endif %}
-
 <script>
   function applyAppleEquationNumbers() {
     var blocks = document.querySelectorAll('.apple-article-body mjx-container[display="true"]');
@@ -146,7 +141,7 @@
   }
 
   function loadMathJaxIfNeeded() {
-    var isPostDetailPage = {{ is_post_detail_page | jsonify }};
+    var isPostDetailPage = {{ (page.collection == 'posts' or page.layout == 'posts') | jsonify }};
     if (!isPostDetailPage) {
       return;
     }

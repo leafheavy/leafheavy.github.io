@@ -75,23 +75,38 @@
       var text = block.textContent || '';
       
       // 检测是否是 proof 环境（包含 "Proof." 和 "□"）
-      if (text.includes('Proof.') && text.includes('□')) {
-        // 获取内容（移除 □）
-        var contentText = text.replace('□', '').trim();
+      if (text.indexOf('Proof.') !== -1 && text.indexOf('□') !== -1) {
+        // 获取内容（移除 "Proof." 和 "□"）
+        var contentText = text.replace('Proof.', '').replace('□', '').trim();
         
         // 创建新的容器
         var wrapper = document.createElement('div');
         wrapper.style.cssText = 'text-align: left; line-height: 1.8; margin: 1em 0;';
         
-        // 创建内容部分
+        // 创建 Proof 标题
+        var proofTitle = document.createElement('div');
+        proofTitle.style.cssText = 'font-weight: bold; margin-bottom: 0.5em;';
+        proofTitle.textContent = 'Proof.';
+        wrapper.appendChild(proofTitle);
+        
+        // 创建内容部分 - 保留 MathJax 渲染的内容
         var content = document.createElement('div');
-        content.style.cssText = 'display: block;';
-        content.textContent = contentText;
+        content.style.cssText = 'display: block; text-align: left;';
+        
+        // 克隆原始 MathJax 内容
+        var mjxMath = block.querySelector('mjx-math');
+        if (mjxMath) {
+          var clone = mjxMath.cloneNode(true);
+          content.appendChild(clone);
+        } else {
+          content.textContent = contentText;
+        }
+        
         wrapper.appendChild(content);
         
         // 创建 QED 符号
         var qed = document.createElement('div');
-        qed.style.cssText = 'text-align: right; margin-top: 0.5em; font-size: 1.2em;';
+        qed.style.cssText = 'text-align: right; margin-top: 0.5em; font-size: 1.1em;';
         qed.textContent = '□';
         wrapper.appendChild(qed);
         
@@ -147,6 +162,7 @@
         displayMath: [['$$', '$$'], ['\\[', '\\]']],
         macros: Object.assign({}, defaultMacros, pageMacros),
         environments: {
+          proof: ['\\textbf{Proof. }', '\\quad\\square'],
           itemize: ['\\begin{array}{l}', '\\end{array}']
         },
         processEscapes: true,

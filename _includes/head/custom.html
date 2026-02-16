@@ -24,7 +24,7 @@
   .proof-environment .proof-qed {
     text-align: right;
     margin-top: 0.5em;
-    font-size: 1.5em;  /* 增大 □ 符号 */
+    font-size: 1.5em;
   }
   
   .itemize-environment {
@@ -34,7 +34,7 @@
   .itemize-environment ul {
     list-style-type: disc;
     padding-left: 2em;
-    margin: 0;
+    margin: 0.5em 0;
   }
   .itemize-environment li {
     margin: 0.3em 0;
@@ -43,6 +43,41 @@
 </style>
 
 <script>
+  function processItemizeInContent(content) {
+    // 处理内容中的 itemize 环境，将其转换为 HTML
+    var itemizePattern = /\\begin\{itemize\}([\s\S]*?)\\end\{itemize\}/g;
+    
+    content = content.replace(itemizePattern, function(match, itemContent) {
+      // 分割 \item
+      var items = itemContent.split(/\\item\s*/);
+      var listItems = '';
+      
+      items.forEach(function(item) {
+        item = item.trim();
+        if (item) {
+          // 每个 item 内容可能包含数学公式，保留它们
+          listItems += '<li>' + item + '</li>';
+        }
+      });
+      
+      // 返回一个特殊标记，稍后会被替换为实际的 HTML
+      var id = 'itemize-placeholder-' + Math.random().toString(36).substr(2, 9);
+      var itemizeHtml = '<div class="itemize-environment" data-id="' + id + '">' +
+        '<ul>' + listItems + '</ul>' +
+        '</div>';
+      
+      // 将 HTML 存储起来
+      if (!window.itemizePlaceholders) {
+        window.itemizePlaceholders = {};
+      }
+      window.itemizePlaceholders[id] = itemizeHtml;
+      
+      return '{{ITEMIZE_' + id + '}}';
+    });
+    
+    return content;
+  }
+
   function preprocessProofEnvironments() {
     var contentNode = document.querySelector('.page__content, .apple-article-body');
     if (!contentNode) return;
@@ -54,6 +89,9 @@
     
     html = html.replace(proofPattern, function(match, openDelim, content, closeDelim) {
       var id = 'proof-' + Math.random().toString(36).substr(2, 9);
+      
+      // 先处理内容中的 itemize 环境
+      content = processItemizeInContent(content);
       
       var proofHtml = '<div class="proof-environment" id="' + id + '">' +
         '<div class="proof-title">Proof.</div>' +
@@ -67,19 +105,70 @@
     contentNode.innerHTML = html;
   }
 
+  function restoreItemizePlaceholders() {
+    // 在 MathJax 渲染后，替换 itemize 占位符
+    if (!window.itemizePlaceholders) return;
+    
+    var contentNode = document.querySelector('.page__content, .apple-article-body');
+    if (!contentNode) return;
+    
+    Object.keys(window.itemizePlaceholders).forEach(function(id) {
+      var placeholder = '{{ITEMIZE_' + id + '}}';
+      var itemizeHtml = window.itemizePlaceholders[id];
+      
+      // 查找包含占位符的元素
+      var walker = document.createTreeWalker(
+        contentNode,
+        NodeFilter.SHOW_TEXT,
+        null,
+        false
+      );
+      
+      var nodesToReplace = [];
+      var node;
+      
+      while (node = walker.nextNode()) {
+        if (node.textContent.includes(placeholder)) {
+          nodesToReplace.push(node);
+        }
+      }
+      
+      nodesToReplace.forEach(function(textNode) {
+        var parent = textNode.parentNode;
+        var parts = textNode.textContent.split(placeholder);
+        
+        var fragment = document.createDocumentFragment();
+        
+        if (parts[0]) {
+          fragment.appendChild(document.createTextNode(parts[0]));
+        }
+        
+        var tempDiv = document.createElement('div');
+        tempDiv.innerHTML = itemizeHtml;
+        var itemizeElement = tempDiv.firstChild;
+        fragment.appendChild(itemizeElement);
+        
+        if (parts[1]) {
+          fragment.appendChild(document.createTextNode(parts[1]));
+        }
+        
+        parent.replaceChild(fragment, textNode);
+      });
+    });
+  }
+
   function preprocessItemizeEnvironments() {
     var contentNode = document.querySelector('.page__content, .apple-article-body');
     if (!contentNode) return;
     
     var html = contentNode.innerHTML;
     
-    // 匹配 $$\begin{itemize}...\end{itemize}$$ 或 \[\begin{itemize}...\end{itemize}\]
+    // 处理独立的 itemize 环境（不在 proof 中的）
     var itemizePattern = /(\$\$|\\\[)\s*\\begin\{itemize\}([\s\S]*?)\\end\{itemize\}\s*(\$\$|\\\])/g;
     
     html = html.replace(itemizePattern, function(match, openDelim, content, closeDelim) {
       var id = 'itemize-' + Math.random().toString(36).substr(2, 9);
       
-      // 分割 \item
       var items = content.split(/\\item\s*/);
       var listItems = '';
       
@@ -101,11 +190,9 @@
   }
 
   function fixInternalLinks() {
-    // 处理 MathJax 生成的内部引用链接
     document.addEventListener('click', function(e) {
       var target = e.target;
       
-      // 查找是否是链接或链接内的元素
       while (target && target.tagName !== 'A') {
         target = target.parentElement;
       }
@@ -114,7 +201,6 @@
       
       var href = target.getAttribute('href');
       
-      // 检查是否是页面内锚点链接（以 # 开头）
       if (href && href.startsWith('#')) {
         e.preventDefault();
         
@@ -124,7 +210,6 @@
         if (targetElement) {
           targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
           
-          // 更新 URL 但不刷新页面
           if (window.history && window.history.pushState) {
             window.history.pushState(null, '', href);
           }
@@ -237,7 +322,7 @@
         displayMath: [['$$', '$$'], ['\\[', '\\]']],
         macros: Object.assign({}, defaultMacros, pageMacros),
         environments: {
-          // proof 和 itemize 已通过 JavaScript 预处理，这里不再定义
+          // proof 和 itemize 已通过 JavaScript 预处理
         },
         processEscapes: true,
         processEnvironments: true,
@@ -256,6 +341,7 @@
         pageReady: function () {
           return MathJax.startup.defaultPageReady().then(function () {
             applyAppleEquationNumbers();
+            restoreItemizePlaceholders();  // 在 MathJax 渲染后恢复 itemize
           });
         }
       }
@@ -292,16 +378,17 @@
     if (window.MathJax && MathJax.typesetPromise) {
       MathJax.typesetPromise().then(function () {
         applyAppleEquationNumbers();
+        restoreItemizePlaceholders();  // 在重新渲染后恢复 itemize
       });
     }
   }
 
   document.addEventListener('DOMContentLoaded', function () {
-    preprocessProofEnvironments();      // 预处理 proof 环境
-    preprocessItemizeEnvironments();    // 预处理 itemize 环境
+    preprocessProofEnvironments();      // 先处理 proof（包含内部的 itemize）
+    preprocessItemizeEnvironments();    // 再处理独立的 itemize
     normalizeCodeLanguageClasses();
     loadMathJaxIfNeeded();
-    fixInternalLinks();                 // 修复内部链接跳转
+    fixInternalLinks();
   });
 </script>
 

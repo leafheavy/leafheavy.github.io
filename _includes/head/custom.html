@@ -84,8 +84,8 @@
     var defaultMacros = {
       determinant: ['\\lvert #1 \\rvert', 1]
     };
-    var pageMacros = {{ page.mathjax_macros | default: {} | jsonify }};
-
+    var pageMacros = {{ page.mathjax_macros | jsonify }} || {};
+    
     window.MathJax = {
       tex: {
         packages: {

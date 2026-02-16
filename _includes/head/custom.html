@@ -83,6 +83,8 @@
   function configureMathJax() {
     var commonTexPackages = [
       'ams',
+      'noerrors',
+      'noundefined',
       'newcommand',
       'configmacros',
       'textmacros',
@@ -114,14 +116,9 @@
         inlineMath: [['$', '$'], ['\\(', '\\)']],
         displayMath: [['$$', '$$'], ['\\[', '\\]']],
         macros: Object.assign({}, defaultMacros, pageMacros),
-        environments: {
-          /* 修改 2: 移除了 proof 的手动定义，交给 amsthm 或 HTML 自身处理 */
-          /* proof: ['\\textbf{Proof. }', '\\quad\\square'], */ 
-          itemize: ['\\begin{array}{l}', '\\end{array}']
-        },
         processEscapes: true,
         processEnvironments: true,
-        tags: 'all'
+        tags: 'ams'
       },
       chtml: {
         linebreaks: {
@@ -130,7 +127,8 @@
         }
       },
       options: {
-        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+        processHtmlClass: 'apple-article-body|page__content'
       },
       startup: {
         pageReady: function () {
@@ -143,6 +141,11 @@
   }
 
   function loadMathJaxIfNeeded() {
+    var isPostDetailPage = {{ (page.collection == 'posts' or page.layout == 'posts') | jsonify }};
+    if (!isPostDetailPage) {
+      return;
+    }
+
     var frontMatterEnabled = {{ page.mathjax | default: false | jsonify }};
     if (!frontMatterEnabled && !pageHasMathContent()) {
       return;
@@ -163,7 +166,24 @@
     if (!document.querySelector('script[data-mathjax-script]')) {
       var script = document.createElement('script');
       script.defer = true;
-      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';
+      var cdnSources = [
+        'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js',
+        'https://unpkg.com/mathjax@3/es5/tex-chtml.js'
+      ];
+      var currentSourceIndex = 0;
+
+      function setSource(index) {
+        currentSourceIndex = index;
+        script.src = cdnSources[index];
+      }
+
+      script.onerror = function () {
+        if (currentSourceIndex + 1 < cdnSources.length) {
+          setSource(currentSourceIndex + 1);
+        }
+      };
+
+      setSource(0);
       script.setAttribute('data-mathjax-script', 'true');
       document.head.appendChild(script);
       return;

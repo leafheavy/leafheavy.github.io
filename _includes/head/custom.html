@@ -43,6 +43,30 @@
 </style>
 
 <script>
+  // 在内容中处理 itemize 环境的辅助函数
+  function preprocessItemizeInContent(content) {
+    var itemizePattern = /\\begin\{itemize\}([\s\S]*?)\\end\{itemize\}/g;
+    
+    return content.replace(itemizePattern, function(match, items) {
+      var id = 'itemize-' + Math.random().toString(36).substr(2, 9);
+      
+      // 分割 \item
+      var itemList = items.split(/\\item/);
+      var listItems = '';
+      
+      itemList.forEach(function(item) {
+        item = item.trim();
+        if (item) {
+          listItems += '<li>' + item + '</li>';
+        }
+      });
+      
+      return '<div class="itemize-environment" id="' + id + '">' +
+        '<ul>' + listItems + '</ul>' +
+        '</div>';
+    });
+  }
+
   function preprocessProofEnvironments() {
     var contentNode = document.querySelector('.page__content, .apple-article-body');
     if (!contentNode) return;
@@ -55,9 +79,12 @@
     html = html.replace(proofPattern, function(match, openDelim, content, closeDelim) {
       var id = 'proof-' + Math.random().toString(36).substr(2, 9);
       
+      // 先在 proof 内容中处理 itemize 环境
+      var processedContent = preprocessItemizeInContent(content.trim());
+      
       var proofHtml = '<div class="proof-environment" id="' + id + '">' +
         '<div class="proof-title">Proof.</div>' +
-        '<div class="proof-content">' + content.trim() + '</div>' +
+        '<div class="proof-content">' + processedContent + '</div>' +
         '<div class="proof-qed">□</div>' +
         '</div>';
       
@@ -73,14 +100,14 @@
     
     var html = contentNode.innerHTML;
     
-    // 匹配 $$\begin{itemize}...\end{itemize}$$ 或 \[\begin{itemize}...\end{itemize}\]
+    // 处理独立的 itemize 环境（不在 proof 中的）
     var itemizePattern = /(\$\$|\\\[)\s*\\begin\{itemize\}([\s\S]*?)\\end\{itemize\}\s*(\$\$|\\\])/g;
     
     html = html.replace(itemizePattern, function(match, openDelim, content, closeDelim) {
       var id = 'itemize-' + Math.random().toString(36).substr(2, 9);
       
       // 分割 \item
-      var items = content.split(/\\item\s*/);
+      var items = content.split(/\\item/);
       var listItems = '';
       
       items.forEach(function(item) {
@@ -297,8 +324,8 @@
   }
 
   document.addEventListener('DOMContentLoaded', function () {
-    preprocessProofEnvironments();      // 预处理 proof 环境
-    preprocessItemizeEnvironments();    // 预处理 itemize 环境
+    preprocessProofEnvironments();      // 预处理 proof 环境（会同时处理内部的 itemize）
+    preprocessItemizeEnvironments();    // 预处理独立的 itemize 环境
     normalizeCodeLanguageClasses();
     loadMathJaxIfNeeded();
     fixInternalLinks();                 // 修复内部链接跳转

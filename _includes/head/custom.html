@@ -166,6 +166,14 @@
       options: {
         skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
       },
+      chtml: {
+        displayAlign: 'left',
+        displayIndent: '0',
+        linebreaks: {
+          automatic: true,
+          width: 'container'
+        }
+      },
       startup: {
         pageReady: function () {
           return MathJax.startup.defaultPageReady().then(function () {

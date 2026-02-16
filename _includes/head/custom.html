@@ -68,41 +68,78 @@
     });
   }
 
-  {% if page.mathjax %}
-  window.MathJax = {
-    tex: {
-      inlineMath: [['$', '$'], ['\\(', '\\)']],
-      displayMath: [['$$', '$$'], ['\\[', '\\]']],
-      processEscapes: true,
-      processEnvironments: true,
-      tags: 'all'
-    },
-    options: {
-      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    },
-    startup: {
-      pageReady: function () {
-        return MathJax.startup.defaultPageReady().then(function () {
-          applyAppleEquationNumbers();
-        });
-      }
+  function pageHasMathContent() {
+    var contentNode = document.querySelector('.page__content, .apple-article-body');
+    if (!contentNode) {
+      return false;
     }
-  };
-  {% endif %}
 
-  document.addEventListener('DOMContentLoaded', function () {
-    normalizeCodeLanguageClasses();
+    var rawText = contentNode.textContent || '';
+    var hasDisplayOrLatexMarkers = /\$\$|\\\(|\\\)|\\\[|\\\]|\\begin\{|\\operatorname\{|\\boldsymbol\{|\\mathbb\{/.test(rawText);
+    var hasInlineDollarMath = /(^|[^\\])\$[^$\n]+\$(?!\$)/.test(rawText);
+    return hasDisplayOrLatexMarkers || hasInlineDollarMath;
+  }
+
+  function configureMathJax() {
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true,
+        tags: 'all'
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      startup: {
+        pageReady: function () {
+          return MathJax.startup.defaultPageReady().then(function () {
+            applyAppleEquationNumbers();
+          });
+        }
+      }
+    };
+  }
+
+  function loadMathJaxIfNeeded() {
+    var frontMatterEnabled = {{ page.mathjax | default: false | jsonify }};
+    if (!frontMatterEnabled && !pageHasMathContent()) {
+      return;
+    }
+  if (!window.MathJax) {
+      configureMathJax();
+    }
+
+    if (!document.querySelector('link[data-mathjax-preconnect]')) {
+      var preconnect = document.createElement('link');
+      preconnect.rel = 'preconnect';
+      preconnect.href = 'https://cdn.jsdelivr.net';
+      preconnect.crossOrigin = 'anonymous';
+      preconnect.setAttribute('data-mathjax-preconnect', 'true');
+      document.head.appendChild(preconnect);
+    }
+
+    if (!document.querySelector('script[data-mathjax-script]')) {
+      var script = document.createElement('script');
+      script.defer = true;
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';
+      script.setAttribute('data-mathjax-script', 'true');
+      document.head.appendChild(script);
+      return;
+    }
 
     if (window.MathJax && MathJax.typesetPromise) {
       MathJax.typesetPromise().then(function () {
         applyAppleEquationNumbers();
       });
     }
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    normalizeCodeLanguageClasses();
+    loadMathJaxIfNeeded();
   });
 </script>
-{% if page.mathjax %}
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
-{% endif %}
 
 <!-- end custom head snippets -->

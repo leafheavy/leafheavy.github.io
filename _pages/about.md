@@ -27,7 +27,7 @@ My current research interests focus on dynamic adaptation and memory in intellig
 
 # 📝 Publications 
 
-<div class='paper-box'><div class='paper-box-image'><div><div class="badge">AAAI 2026</div><img src='images/MT-TTA.png' alt="sym" width="100%"></div></div>
+<div class='paper-box'><div class='paper-box-image'><div><div class="badge">AAAI 2026</div><img src='../images/papers/MT-TTA.png' alt="sym" width="100%"></div></div>
 <div class='paper-box-text' markdown="1">
 
 [Multi-Task Test-time Adaptation via Gradient Consensus and Plasticity Constraint](https://github.com/leafheavy/MT-TTA)
@@ -39,7 +39,7 @@ My current research interests focus on dynamic adaptation and memory in intellig
 </div>
 </div>
 
-# 🎖 Honors and Awards
+# 🥇 Honors and Awards
 - *2024.12*  **National Scholarship** *(China's highest honor for undergraduate students)*
 - *2024.11*  **National Second Prize**, China Undergraduate Mathematical Contest in Modeling
 - *2024.08* **National First Prize**, 2024 RAICOM National Finals *(Team Leader)* 

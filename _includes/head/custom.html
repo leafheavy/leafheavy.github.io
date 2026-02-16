@@ -68,47 +68,6 @@
     });
   }
 
-  function normalizeLatexListEnvironments() {
-    var contentNode = document.querySelector('.page__content, .apple-article-body');
-    if (!contentNode) {
-      return;
-    }
-
-    var html = contentNode.innerHTML;
-    var replaceListEnv = function (environment, markerBuilder) {
-      var envPattern = new RegExp('\\\\begin\\\\{' + environment + '\\\\}([\\\\s\\\\S]*?)\\\\end\\\\{' + environment + '\\\\}', 'g');
-      html = html.replace(envPattern, function (_whole, body) {
-        var segments = body.split(/\\item/g).slice(1).map(function (segment) {
-          return segment.replace(/^\s+|\s+$/g, '');
-        }).filter(function (segment) {
-          return !!segment;
-        });
-
-        if (!segments.length) {
-          return _whole;
-        }
-
-        var alignedLines = segments.map(function (segment, index) {
-          return '&' + markerBuilder(index) + '\\;' + segment;
-        }).join('\\\\');
-
-        return '\\begin{aligned}' + alignedLines + '\\end{aligned}';
-      });
-    };
-
-    replaceListEnv('itemize', function () {
-      return '\\bullet';
-    });
-
-    replaceListEnv('enumerate', function (index) {
-      return (index + 1) + '.';
-    });
-
-    if (html !== contentNode.innerHTML) {
-      contentNode.innerHTML = html;
-    }
-  }
-
   function pageHasMathContent() {
     var contentNode = document.querySelector('.page__content, .apple-article-body');
     if (!contentNode) {
@@ -132,10 +91,7 @@
       'cancel',
       'color',
       'braket',
-      'html',
-      'amscd',
-      'bbox',
-      'boldsymbol'
+      'html'
     ];
 
     var defaultMacros = {
@@ -212,7 +168,6 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     normalizeCodeLanguageClasses();
-    normalizeLatexListEnvironments();
     loadMathJaxIfNeeded();
   });
 </script>

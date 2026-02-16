@@ -113,7 +113,7 @@
         displayMath: [['$$', '$$'], ['\\[', '\\]']],
         macros: Object.assign({}, defaultMacros, pageMacros),
         environments: {
-          proof: ['\\textbf{Proof. }', '\\quad\\blacksquare']
+          proof: ['\\begin{array}{@{}l@{}}\\textbf{Proof. }\\\\[0.5em]', '\\\\[0.5em]\\square\\end{array}']
         },
         processEscapes: true,
         processEnvironments: true,

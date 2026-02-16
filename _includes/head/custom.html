@@ -24,7 +24,21 @@
   .proof-environment .proof-qed {
     text-align: right;
     margin-top: 0.5em;
-    font-size: 1.1em;
+    font-size: 1.5em;  /* 增大 □ 符号 */
+  }
+  
+  .itemize-environment {
+    margin: 1em 0;
+    text-align: left;
+  }
+  .itemize-environment ul {
+    list-style-type: disc;
+    padding-left: 2em;
+    margin: 0;
+  }
+  .itemize-environment li {
+    margin: 0.3em 0;
+    text-align: left;
   }
 </style>
 
@@ -39,10 +53,8 @@
     var proofPattern = /(\$\$|\\\[)\s*\\begin\{proof\}([\s\S]*?)\\end\{proof\}\s*(\$\$|\\\])/g;
     
     html = html.replace(proofPattern, function(match, openDelim, content, closeDelim) {
-      // 生成唯一 ID
       var id = 'proof-' + Math.random().toString(36).substr(2, 9);
       
-      // 创建 proof HTML 结构
       var proofHtml = '<div class="proof-environment" id="' + id + '">' +
         '<div class="proof-title">Proof.</div>' +
         '<div class="proof-content">' + content.trim() + '</div>' +
@@ -53,6 +65,72 @@
     });
     
     contentNode.innerHTML = html;
+  }
+
+  function preprocessItemizeEnvironments() {
+    var contentNode = document.querySelector('.page__content, .apple-article-body');
+    if (!contentNode) return;
+    
+    var html = contentNode.innerHTML;
+    
+    // 匹配 $$\begin{itemize}...\end{itemize}$$ 或 \[\begin{itemize}...\end{itemize}\]
+    var itemizePattern = /(\$\$|\\\[)\s*\\begin\{itemize\}([\s\S]*?)\\end\{itemize\}\s*(\$\$|\\\])/g;
+    
+    html = html.replace(itemizePattern, function(match, openDelim, content, closeDelim) {
+      var id = 'itemize-' + Math.random().toString(36).substr(2, 9);
+      
+      // 分割 \item
+      var items = content.split(/\\item\s*/);
+      var listItems = '';
+      
+      items.forEach(function(item) {
+        item = item.trim();
+        if (item) {
+          listItems += '<li>' + item + '</li>';
+        }
+      });
+      
+      var itemizeHtml = '<div class="itemize-environment" id="' + id + '">' +
+        '<ul>' + listItems + '</ul>' +
+        '</div>';
+      
+      return itemizeHtml;
+    });
+    
+    contentNode.innerHTML = html;
+  }
+
+  function fixInternalLinks() {
+    // 处理 MathJax 生成的内部引用链接
+    document.addEventListener('click', function(e) {
+      var target = e.target;
+      
+      // 查找是否是链接或链接内的元素
+      while (target && target.tagName !== 'A') {
+        target = target.parentElement;
+      }
+      
+      if (!target || target.tagName !== 'A') return;
+      
+      var href = target.getAttribute('href');
+      
+      // 检查是否是页面内锚点链接（以 # 开头）
+      if (href && href.startsWith('#')) {
+        e.preventDefault();
+        
+        var targetId = href.substring(1);
+        var targetElement = document.getElementById(targetId);
+        
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          
+          // 更新 URL 但不刷新页面
+          if (window.history && window.history.pushState) {
+            window.history.pushState(null, '', href);
+          }
+        }
+      }
+    });
   }
 
   function applyAppleEquationNumbers() {
@@ -159,7 +237,7 @@
         displayMath: [['$$', '$$'], ['\\[', '\\]']],
         macros: Object.assign({}, defaultMacros, pageMacros),
         environments: {
-          itemize: ['\\begin{array}{l}', '\\end{array}']
+          // proof 和 itemize 已通过 JavaScript 预处理，这里不再定义
         },
         processEscapes: true,
         processEnvironments: true,
@@ -219,9 +297,11 @@
   }
 
   document.addEventListener('DOMContentLoaded', function () {
-    preprocessProofEnvironments();  // 在 MathJax 之前处理 proof
+    preprocessProofEnvironments();      // 预处理 proof 环境
+    preprocessItemizeEnvironments();    // 预处理 itemize 环境
     normalizeCodeLanguageClasses();
     loadMathJaxIfNeeded();
+    fixInternalLinks();                 // 修复内部链接跳转
   });
 </script>
 

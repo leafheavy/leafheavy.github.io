@@ -9,7 +9,52 @@
 <meta name="theme-color" content="#ffffff">
 <link rel="stylesheet" href="{{ "/assets/css/academicons.css" | relative_url }}"/>
 
+<style>
+  .proof-environment {
+    margin: 1em 0;
+    text-align: left;
+  }
+  .proof-environment .proof-title {
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
+  .proof-environment .proof-content {
+    line-height: 1.8;
+  }
+  .proof-environment .proof-qed {
+    text-align: right;
+    margin-top: 0.5em;
+    font-size: 1.1em;
+  }
+</style>
+
 <script>
+  function preprocessProofEnvironments() {
+    var contentNode = document.querySelector('.page__content, .apple-article-body');
+    if (!contentNode) return;
+    
+    var html = contentNode.innerHTML;
+    
+    // 匹配 $$\begin{proof}...\end{proof}$$ 或 \[\begin{proof}...\end{proof}\]
+    var proofPattern = /(\$\$|\\\[)\s*\\begin\{proof\}([\s\S]*?)\\end\{proof\}\s*(\$\$|\\\])/g;
+    
+    html = html.replace(proofPattern, function(match, openDelim, content, closeDelim) {
+      // 生成唯一 ID
+      var id = 'proof-' + Math.random().toString(36).substr(2, 9);
+      
+      // 创建 proof HTML 结构
+      var proofHtml = '<div class="proof-environment" id="' + id + '">' +
+        '<div class="proof-title">Proof.</div>' +
+        '<div class="proof-content">' + content.trim() + '</div>' +
+        '<div class="proof-qed">□</div>' +
+        '</div>';
+      
+      return proofHtml;
+    });
+    
+    contentNode.innerHTML = html;
+  }
+
   function applyAppleEquationNumbers() {
     var blocks = document.querySelectorAll('.apple-article-body mjx-container[display="true"]');
     var counter = 0;
@@ -68,54 +113,6 @@
     });
   }
 
-  function formatProofEnvironments() {
-    var proofBlocks = document.querySelectorAll('.apple-article-body mjx-container[display="true"]');
-    
-    proofBlocks.forEach(function(block) {
-      var text = block.textContent || '';
-      
-      // 检测是否是 proof 环境（包含 "Proof." 和 "□"）
-      if (text.indexOf('Proof.') !== -1 && text.indexOf('□') !== -1) {
-        // 获取内容（移除 "Proof." 和 "□"）
-        var contentText = text.replace('Proof.', '').replace('□', '').trim();
-        
-        // 创建新的容器
-        var wrapper = document.createElement('div');
-        wrapper.style.cssText = 'text-align: left; line-height: 1.8; margin: 1em 0;';
-        
-        // 创建 Proof 标题
-        var proofTitle = document.createElement('div');
-        proofTitle.style.cssText = 'font-weight: bold; margin-bottom: 0.5em;';
-        proofTitle.textContent = 'Proof.';
-        wrapper.appendChild(proofTitle);
-        
-        // 创建内容部分 - 保留 MathJax 渲染的内容
-        var content = document.createElement('div');
-        content.style.cssText = 'display: block; text-align: left;';
-        
-        // 克隆原始 MathJax 内容
-        var mjxMath = block.querySelector('mjx-math');
-        if (mjxMath) {
-          var clone = mjxMath.cloneNode(true);
-          content.appendChild(clone);
-        } else {
-          content.textContent = contentText;
-        }
-        
-        wrapper.appendChild(content);
-        
-        // 创建 QED 符号
-        var qed = document.createElement('div');
-        qed.style.cssText = 'text-align: right; margin-top: 0.5em; font-size: 1.1em;';
-        qed.textContent = '□';
-        wrapper.appendChild(qed);
-        
-        // 替换原有块
-        block.parentNode.replaceChild(wrapper, block);
-      }
-    });
-  }
-
   function pageHasMathContent() {
     var contentNode = document.querySelector('.page__content, .apple-article-body');
     if (!contentNode) {
@@ -162,7 +159,6 @@
         displayMath: [['$$', '$$'], ['\\[', '\\]']],
         macros: Object.assign({}, defaultMacros, pageMacros),
         environments: {
-          proof: ['\\textbf{Proof. }', '\\quad\\square'],
           itemize: ['\\begin{array}{l}', '\\end{array}']
         },
         processEscapes: true,
@@ -182,7 +178,6 @@
         pageReady: function () {
           return MathJax.startup.defaultPageReady().then(function () {
             applyAppleEquationNumbers();
-            formatProofEnvironments();
           });
         }
       }
@@ -219,12 +214,12 @@
     if (window.MathJax && MathJax.typesetPromise) {
       MathJax.typesetPromise().then(function () {
         applyAppleEquationNumbers();
-        formatProofEnvironments();
       });
     }
   }
 
   document.addEventListener('DOMContentLoaded', function () {
+    preprocessProofEnvironments();  // 在 MathJax 之前处理 proof
     normalizeCodeLanguageClasses();
     loadMathJaxIfNeeded();
   });

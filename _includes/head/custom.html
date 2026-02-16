@@ -91,11 +91,13 @@
       'cancel',
       'color',
       'braket',
-      'html'
+      'html',
+      'amsthm'  /* 修改 1: 添加 amsthm 包，提供标准的定理证明环境支持 */
     ];
 
     var defaultMacros = {
-      determinant: ['\\lvert #1 \\rvert', 1]
+      determinant: ['\\lvert #1 \\rvert', 1],
+      item: '\\\\ \\text{• }'
     };
     var pageMacros = {{ page.mathjax_macros | jsonify }} || {};
 
@@ -113,7 +115,9 @@
         displayMath: [['$$', '$$'], ['\\[', '\\]']],
         macros: Object.assign({}, defaultMacros, pageMacros),
         environments: {
-          proof: ['\\textbf{Proof. }', '\\quad\\blacksquare']
+          /* 修改 2: 移除了 proof 的手动定义，交给 amsthm 或 HTML 自身处理 */
+          /* proof: ['\\textbf{Proof. }', '\\quad\\square'], */ 
+          itemize: ['\\begin{array}{l}', '\\end{array}']
         },
         processEscapes: true,
         processEnvironments: true,

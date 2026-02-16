@@ -28,12 +28,12 @@ author_profile: true
   <!-- 列表容器：使用 .apple-post-list 以便在大屏显示两列（CSS 已提供） -->
   <div class="apple-post-list" id="blog-post-list">
     {% for post in site.posts %}
-      <a href="{{ post.url | relative_url }}" class="apple-post-card js-search-post" data-search="{{ post.title }} {{ post.excerpt | strip_html }}">
+      <a href="{{ post.url | relative_url }}" class="apple-post-card js-search-post" data-search="{{ post.title }} {{ post.tags | join: ' ' }}">
         <span class="apple-card-date">{{ post.date | date: "%B %d, %Y" }}</span>
         <h2 class="apple-card-title">{{ post.title }}</h2>
-        <p class="apple-card-excerpt">
-          {{ post.excerpt | strip_html | truncatewords: 30 }}
-        </p>
+        {% if post.tags and post.tags.size > 0 %}
+        <p class="apple-card-excerpt">#{{ post.tags | join: '  #' }}</p>
+        {% endif %}
       </a>
     {% endfor %}
   </div>

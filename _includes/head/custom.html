@@ -68,6 +68,7 @@
     });
   }
 
+  {% if page.mathjax %}
   window.MathJax = {
     tex: {
       inlineMath: [['$', '$'], ['\\(', '\\)']],
@@ -87,6 +88,7 @@
       }
     }
   };
+  {% endif %}
 
   document.addEventListener('DOMContentLoaded', function () {
     normalizeCodeLanguageClasses();
@@ -98,6 +100,9 @@
     }
   });
 </script>
+{% if page.mathjax %}
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+{% endif %}
 
 <!-- end custom head snippets -->

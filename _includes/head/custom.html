@@ -85,21 +85,32 @@
     return hasDisplayOrLatexMarkers || hasInlineDollarMath;
   }
 
+    function recoverAccidentalLatexCodeBlocks() {
+    var blocks = document.querySelectorAll('.apple-article-body pre > code, .page__content pre > code');
+    blocks.forEach(function (codeNode) {
+      var raw = (codeNode.textContent || '').trim();
+      if (!raw) return;
+
+      var looksLikeLatex = /\\begin\{|\\end\{|\\\[|\\\]|\\frac\{|\\boldsymbol\{|\\mathbb\{|\\operatorname\{|\$\$/.test(raw);
+      if (!looksLikeLatex) return;
+
+      var pre = codeNode.closest('pre');
+      if (!pre || !pre.parentNode) return;
+
+      var replacement = document.createElement('div');
+      replacement.className = 'mathjax-recovered-block';
+      replacement.textContent = raw;
+      pre.parentNode.replaceChild(replacement, pre);
+    });
+  }
+
   function configureMathJax() {
     var commonTexPackages = [
       'ams',
       'noerrors',
       'noundefined',
       'newcommand',
-      'configmacros',
-      'textmacros',
-      'mathtools',
-      'physics',
-      'cancel',
-      'color',
-      'braket',
-      'html',
-      'amsthm'  /* 修改 1: 添加 amsthm 包，提供标准的定理证明环境支持 */
+      'configmacros'
     ];
 
     var defaultMacros = {
@@ -169,28 +180,34 @@
     }
 
     if (!document.querySelector('script[data-mathjax-script]')) {
-      var script = document.createElement('script');
-      script.defer = true;
+      
       var cdnSources = [
         'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js',
         'https://unpkg.com/mathjax@3/es5/tex-chtml.js'
       ];
-      var currentSourceIndex = 0;
 
-      function setSource(index) {
-        currentSourceIndex = index;
+      function appendMathJaxScript(index) {
+        if (index >= cdnSources.length) {
+          return;
+        }
+
+        var script = document.createElement('script');
+        script.defer = true;
         script.src = cdnSources[index];
+        script.setAttribute('data-mathjax-script', 'true');
+        script.onerror = function () {
+          script.removeAttribute('data-mathjax-script');
+          if (script.parentNode) {
+            script.parentNode.removeChild(script);
+          }
+          appendMathJaxScript(index + 1);
+        };
+
+        document.head.appendChild(script);
       }
 
-      script.onerror = function () {
-        if (currentSourceIndex + 1 < cdnSources.length) {
-          setSource(currentSourceIndex + 1);
-        }
-      };
+      appendMathJaxScript(0);
 
-      setSource(0);
-      script.setAttribute('data-mathjax-script', 'true');
-      document.head.appendChild(script);
       return;
     }
 
@@ -203,6 +220,7 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     normalizeCodeLanguageClasses();
+    recoverAccidentalLatexCodeBlocks();
     loadMathJaxIfNeeded();
   });
 </script>

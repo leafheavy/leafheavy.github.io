@@ -81,10 +81,22 @@
   }
 
   function configureMathJax() {
+    var defaultMacros = {
+      determinant: ['\\lvert #1 \\rvert', 1]
+    };
+    var pageMacros = {{ page.mathjax_macros | default: {} | jsonify }};
+
     window.MathJax = {
       tex: {
+        packages: {
+          '[+]': ['configmacros']
+        },
         inlineMath: [['$', '$'], ['\\(', '\\)']],
         displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        macros: Object.assign({}, defaultMacros, pageMacros),
+        environments: {
+          proof: ['\\textbf{Proof. }', '\\quad\\blacksquare']
+        },
         processEscapes: true,
         processEnvironments: true,
         tags: 'all'

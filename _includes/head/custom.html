@@ -160,6 +160,36 @@
     contentNode.innerHTML = html;
   }
 
+  function escapeCssSelector(value) {
+    if (window.CSS && typeof window.CSS.escape === 'function') {
+      return window.CSS.escape(value);
+    }
+    return value.replace(/([#.;?+*~':"!^$\[\]()=>|\/@])/g, '\\$1');
+  }
+
+  function findAnchorTargetElement(rawHash) {
+    if (!rawHash) return null;
+
+    var decodedHash = decodeURIComponent(rawHash);
+    var targetId = decodedHash.replace(/^#/, '');
+    if (!targetId) return null;
+
+    return document.getElementById(targetId) ||
+      document.querySelector('[name="' + escapeCssSelector(targetId) + '"]') ||
+      document.querySelector('a[href="#' + escapeCssSelector(targetId) + '"]');
+  }
+
+  function scrollToHashTarget(rawHash) {
+    var targetElement = findAnchorTargetElement(rawHash);
+    if (!targetElement) return false;
+
+    targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (window.history && window.history.pushState) {
+      window.history.pushState(null, '', '#' + decodeURIComponent(rawHash).replace(/^#/, ''));
+    }
+    return true;
+  }
+
   function fixInternalLinks() {
     // 处理 MathJax 生成的内部引用链接
     document.addEventListener('click', function(e) {
@@ -191,17 +221,7 @@
         e.preventDefault();
         
         var targetHash = isPureHash ? href : new URL(href, window.location.href).hash;
-        var targetId = targetHash.substring(1);
-        var targetElement = document.getElementById(targetId);
-        
-        if (targetElement) {
-          targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          
-          // 更新 URL 但不刷新页面
-          if (window.history && window.history.pushState) {
-            window.history.pushState(null, '', targetHash);
-          }
-        }
+        scrollToHashTarget(targetHash);
       }
     });
   }
@@ -376,6 +396,12 @@
     normalizeCodeLanguageClasses();
     loadMathJaxIfNeeded();
     fixInternalLinks();                 // 修复内部链接跳转
+    // 页面首次加载时若自带 hash（例如从 \ref 跳转而来），自动定位到对应锚点
+    if (window.location.hash) {
+      setTimeout(function () {
+        scrollToHashTarget(window.location.hash);
+      }, 0);
+    }
   });
 </script>
 

@@ -44,4 +44,75 @@ layout: default
     </a>
   </div>
 
+  <!-- 4. 文章页分享按钮（仅 posts 布局出现） -->
+  <button id="apple-share-button" class="apple-share-button" type="button" aria-label="Share current article">
+    分享
+  </button>
+
 </article>
+
+<style>
+  .apple-share-button {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 1200;
+    border: 0;
+    border-radius: 999px;
+    background: #007aff;
+    color: #fff;
+    padding: 10px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  }
+
+  .apple-share-button:hover {
+    background: #0062cc;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var shareButton = document.getElementById('apple-share-button');
+    if (!shareButton) return;
+
+    function copyText(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(text);
+      }
+
+      return new Promise(function (resolve, reject) {
+        var textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.setAttribute('readonly', '');
+        textArea.style.position = 'absolute';
+        textArea.style.left = '-9999px';
+        document.body.appendChild(textArea);
+        textArea.select();
+
+        var succeeded = document.execCommand('copy');
+        document.body.removeChild(textArea);
+
+        if (succeeded) {
+          resolve();
+        } else {
+          reject(new Error('copy failed'));
+        }
+      });
+    }
+
+    shareButton.addEventListener('click', function () {
+      var originalText = shareButton.textContent;
+      copyText(window.location.href).then(function () {
+        shareButton.textContent = '已复制链接';
+      }).catch(function () {
+        shareButton.textContent = '复制失败';
+      }).finally(function () {
+        setTimeout(function () {
+          shareButton.textContent = originalText;
+        }, 1600);
+      });
+    });
+  });
+</script>

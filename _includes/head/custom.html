@@ -73,10 +73,10 @@
     
     var html = contentNode.innerHTML;
     
-    // 匹配 $$\begin{proof}...\end{proof}$$ 或 \[\begin{proof}...\end{proof}\]
-    var proofPattern = /(\$\$|\\\[)\s*\\begin\{proof\}([\s\S]*?)\\end\{proof\}\s*(\$\$|\\\])/g;
+    // 匹配 \begin{proof}...\end{proof}（可选 $$ 或 \[ \] 包裹）
+    var proofPattern = /((\$\$|\\\[)\s*)?\\begin\{proof\}([\s\S]*?)\\end\{proof\}(\s*(\$\$|\\\]))?/g;
     
-    html = html.replace(proofPattern, function(match, openDelim, content, closeDelim) {
+    html = html.replace(proofPattern, function(match, wrappedOpen, openDelim, content, wrappedClose, closeDelim) {
       var id = 'proof-' + Math.random().toString(36).substr(2, 9);
       
       // 先在 proof 内容中处理 itemize 环境
@@ -100,10 +100,10 @@
     
     var html = contentNode.innerHTML;
     
-    // 处理独立的 itemize 环境（不在 proof 中的）
-    var itemizePattern = /(\$\$|\\\[)\s*\\begin\{itemize\}([\s\S]*?)\\end\{itemize\}\s*(\$\$|\\\])/g;
+    // 处理独立的 itemize 环境（不在 proof 中的），支持是否使用 $$ 包裹
+    var itemizePattern = /((\$\$|\\\[)\s*)?\\begin\{itemize\}([\s\S]*?)\\end\{itemize\}(\s*(\$\$|\\\]))?/g;
     
-    html = html.replace(itemizePattern, function(match, openDelim, content, closeDelim) {
+    html = html.replace(itemizePattern, function(match, wrappedOpen, openDelim, content, wrappedClose, closeDelim) {
       var id = 'itemize-' + Math.random().toString(36).substr(2, 9);
       
       // 分割 \item
@@ -127,6 +127,39 @@
     contentNode.innerHTML = html;
   }
 
+  function slugifyHeadingText(text) {
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/<[^>]*>/g, '')
+      .replace(/[\s]+/g, '-')
+      .replace(/[^\w\-\u4e00-\u9fa5]/g, '')
+      .replace(/-+/g, '-');
+  }
+
+  function preprocessLatexSections() {
+    var contentNode = document.querySelector('.page__content, .apple-article-body');
+    if (!contentNode) return;
+
+    var html = contentNode.innerHTML;
+    var headingCounters = {};
+    var headingMapping = {
+      section: 'h1',
+      subsection: 'h2',
+      subsubsection: 'h3'
+    };
+
+    html = html.replace(/\\(section|subsection|subsubsection)\{([^}]+)\}/g, function(match, level, title) {
+      var tagName = headingMapping[level];
+      var baseId = slugifyHeadingText(title) || level;
+      headingCounters[baseId] = (headingCounters[baseId] || 0) + 1;
+      var headingId = headingCounters[baseId] > 1 ? baseId + '-' + headingCounters[baseId] : baseId;
+      return '<' + tagName + ' id="' + headingId + '">' + title.trim() + '</' + tagName + '>';
+    });
+
+    contentNode.innerHTML = html;
+  }
+
   function fixInternalLinks() {
     // 处理 MathJax 生成的内部引用链接
     document.addEventListener('click', function(e) {
@@ -141,11 +174,24 @@
       
       var href = target.getAttribute('href');
       
-      // 检查是否是页面内锚点链接（以 # 开头）
-      if (href && href.startsWith('#')) {
+      if (!href) return;
+
+      // 检查是否是页面内锚点链接（#hash 或当前页面 URL + #hash）
+      var isPureHash = href.startsWith('#');
+      var isSamePageLink = false;
+
+      if (!isPureHash) {
+        var absoluteUrl = new URL(href, window.location.href);
+        isSamePageLink = absoluteUrl.origin === window.location.origin &&
+          absoluteUrl.pathname === window.location.pathname &&
+          absoluteUrl.hash;
+      }
+
+      if (isPureHash || isSamePageLink) {
         e.preventDefault();
         
-        var targetId = href.substring(1);
+        var targetHash = isPureHash ? href : new URL(href, window.location.href).hash;
+        var targetId = targetHash.substring(1);
         var targetElement = document.getElementById(targetId);
         
         if (targetElement) {
@@ -153,7 +199,7 @@
           
           // 更新 URL 但不刷新页面
           if (window.history && window.history.pushState) {
-            window.history.pushState(null, '', href);
+            window.history.pushState(null, '', targetHash);
           }
         }
       }
@@ -324,6 +370,7 @@
   }
 
   document.addEventListener('DOMContentLoaded', function () {
+    preprocessLatexSections();          // 预处理 LaTeX 标题命令（section/subsection/subsubsection）
     preprocessProofEnvironments();      // 预处理 proof 环境（会同时处理内部的 itemize）
     preprocessItemizeEnvironments();    // 预处理独立的 itemize 环境
     normalizeCodeLanguageClasses();

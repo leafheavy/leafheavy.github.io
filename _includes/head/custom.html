@@ -40,6 +40,25 @@
     margin: 0.3em 0;
     text-align: left;
   }
+
+  .apple-floating-share-button {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 1200;
+    border: 0;
+    border-radius: 999px;
+    background: #007aff;
+    color: #fff;
+    padding: 10px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  }
+
+  .apple-floating-share-button:hover {
+    background: #0062cc;
+  }
 </style>
 
 <script>
@@ -226,6 +245,58 @@
     });
   }
 
+  function initPostShareButton() {
+    var isPostPage = {{ page.collection | default: '' | jsonify }} === 'posts';
+    if (!isPostPage) return;
+
+    if (document.getElementById('apple-floating-share-button')) return;
+
+    var shareButton = document.createElement('button');
+    shareButton.id = 'apple-floating-share-button';
+    shareButton.className = 'apple-floating-share-button';
+    shareButton.type = 'button';
+    shareButton.setAttribute('aria-label', 'Share current article');
+    shareButton.textContent = '分享';
+    document.body.appendChild(shareButton);
+
+    function copyText(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(text);
+      }
+
+      return new Promise(function(resolve, reject) {
+        var textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.setAttribute('readonly', '');
+        textArea.style.position = 'absolute';
+        textArea.style.left = '-9999px';
+        document.body.appendChild(textArea);
+        textArea.select();
+
+        var succeeded = document.execCommand('copy');
+        document.body.removeChild(textArea);
+        if (succeeded) {
+          resolve();
+        } else {
+          reject(new Error('copy failed'));
+        }
+      });
+    }
+
+    shareButton.addEventListener('click', function () {
+      var originalText = shareButton.textContent;
+      copyText(window.location.href).then(function () {
+        shareButton.textContent = '已复制链接';
+      }).catch(function () {
+        shareButton.textContent = '复制失败';
+      }).finally(function () {
+        setTimeout(function () {
+          shareButton.textContent = originalText;
+        }, 1600);
+      });
+    });
+  }
+
   function applyAppleEquationNumbers() {
     var blocks = document.querySelectorAll('.apple-article-body mjx-container[display="true"]');
     var counter = 0;
@@ -396,6 +467,8 @@
     normalizeCodeLanguageClasses();
     loadMathJaxIfNeeded();
     fixInternalLinks();                 // 修复内部链接跳转
+    initPostShareButton();              // 仅文章页显示分享按钮
+
     // 页面首次加载时若自带 hash（例如从 \ref 跳转而来），自动定位到对应锚点
     if (window.location.hash) {
       setTimeout(function () {

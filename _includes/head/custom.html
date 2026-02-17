@@ -59,22 +59,6 @@
   .apple-floating-share-button:hover {
     background: #0062cc;
   }
-
-  .latex-ref-link {
-    color: #0066cc;
-    text-decoration: none;
-  }
-
-  .latex-ref-link:hover {
-    text-decoration: underline;
-  }
-
-  .latex-label-anchor {
-    display: inline-block;
-    width: 0;
-    height: 0;
-    overflow: hidden;
-  }
 </style>
 
 <script>
@@ -184,62 +168,12 @@
       subsubsection: 'h3'
     };
 
-    var sectionNumbers = {
-      section: 0,
-      subsection: 0,
-      subsubsection: 0
-    };
-    var sectionLabelRefs = {};
-
-    html = html.replace(/\\(section|subsection|subsubsection)\{([^}]+)\}\s*(?:\\label\{([^}]+)\})?/g, function(match, level, title, labelName) {
+    html = html.replace(/\\(section|subsection|subsubsection)\{([^}]+)\}/g, function(match, level, title) {
       var tagName = headingMapping[level];
-      var headingTitle = title.trim();
-      var baseId = labelName || slugifyHeadingText(headingTitle) || level;
+      var baseId = slugifyHeadingText(title) || level;
       headingCounters[baseId] = (headingCounters[baseId] || 0) + 1;
       var headingId = headingCounters[baseId] > 1 ? baseId + '-' + headingCounters[baseId] : baseId;
-
-      if (level === 'section') {
-        sectionNumbers.section += 1;
-        sectionNumbers.subsection = 0;
-        sectionNumbers.subsubsection = 0;
-      } else if (level === 'subsection') {
-        sectionNumbers.subsection += 1;
-        sectionNumbers.subsubsection = 0;
-      } else {
-        sectionNumbers.subsubsection += 1;
-      }
-
-      var numberText = '';
-      if (level === 'section') {
-        numberText = String(sectionNumbers.section);
-      } else if (level === 'subsection') {
-        numberText = sectionNumbers.section + '.' + sectionNumbers.subsection;
-      } else {
-        numberText = sectionNumbers.section + '.' + sectionNumbers.subsection + '.' + sectionNumbers.subsubsection;
-      }
-
-      if (labelName) {
-        sectionLabelRefs[labelName] = {
-          id: headingId,
-          number: numberText,
-          title: headingTitle
-        };
-      }
-
-      return '<' + tagName + ' id="' + headingId + '">' + headingTitle + '</' + tagName + '>';
-    });
-
-    // 保留非标题类标签，允许 \ref 指向任意位置
-    html = html.replace(/\\label\{([^}]+)\}/g, function(match, labelName) {
-      return '<span id="' + labelName + '" class="latex-label-anchor" aria-hidden="true"></span>';
-    });
-
-    // 在正文中把 \ref 转为可点击锚点；若是标题标签，展示对应节编号
-    html = html.replace(/\\ref\{([^}]+)\}/g, function(match, labelName) {
-      var sectionRef = sectionLabelRefs[labelName];
-      var linkText = sectionRef ? sectionRef.number : labelName;
-      var targetId = sectionRef ? sectionRef.id : labelName;
-      return '<a href="#' + targetId + '" class="latex-ref-link">' + linkText + '</a>';
+      return '<' + tagName + ' id="' + headingId + '">' + title.trim() + '</' + tagName + '>';
     });
 
     contentNode.innerHTML = html;

@@ -36,6 +36,8 @@ My current research interests focus on dynamic adaptation and memory in intellig
 
 **Project Description** <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
 - We have open-sourced what is, to our knowledge, the first Test-Time Adaptation project for multi-task learning. We implemented multi-task versions of various classic TTA methods, including but not limited to: Tent, EATA.
+</div>
+</div>
 
 <div class='paper-box'><div class='paper-box-image'><div><div class="badge">Arxiv 2026</div><img src='../images/papers/Architecture-driven_Shift.png' alt="sym" width="100%"></div></div>
 <div class='paper-box-text' markdown="1">

@@ -36,6 +36,16 @@ My current research interests focus on dynamic adaptation and memory in intellig
 
 **Project Description** <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
 - We have open-sourced what is, to our knowledge, the first Test-Time Adaptation project for multi-task learning. We implemented multi-task versions of various classic TTA methods, including but not limited to: Tent, EATA.
+
+<div class='paper-box'><div class='paper-box-image'><div><div class="badge">Arxiv 2026</div><img src='../images/papers/Architecture-driven_Shift.png' alt="sym" width="100%"></div></div>
+<div class='paper-box-text' markdown="1">
+
+[Architecture-driven Shift: towards a lightweight selector for capturing the trends of logit shift](https://arxiv.org/abs/2605.27469)
+
+**Zhong Ye**, Yu Hu *(Corresponding Author)*, Ruilin Tang
+
+**Project Description** <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
+- We propose a theretical framework Architecture-driven Shift(ADS), enabling to extimate logit shift of model without a full training process in transfer/continual learning (CL) scenraios. Empirical validations prove that ADS captures the tendency of logit shift well and ADS-based selector is useful for reliable CL model selection.
 </div>
 </div>
 

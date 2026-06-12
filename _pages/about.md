@@ -19,7 +19,7 @@ redirect_from:
 
 I'm Zhong Ye, a senior undergraduate student at Guangdong University of Technology. I've secured admission to the master's program at the same university, majoring in Artificial Intelligence. 
 
-My current research interests focus on dynamic adaptation and memory in intelligent systems, including: Test-Time Adaptation (TTA), Continual Learning (CL), and agent memory.
+My research interests lie in the practical application of deep learning through mathematical modeling and implementation, specifically in Test-Time Adaptation (TTA), Continual Learning (CL), and AI for Science (Bioinformatics).
 
 
 <!-- # 🔥 News

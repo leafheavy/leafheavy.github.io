@@ -301,7 +301,7 @@ select:focus {
   padding-left: 14px;
   padding-right: 14px;
   margin-bottom: 0;
-  border-radius: 14px;
+  border-radius: $border-radius;
 }
 
 .form-search label {

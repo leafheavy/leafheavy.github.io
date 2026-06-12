@@ -1,76 +1,33 @@
 ---
-layout: default 
+layout: default
 ---
-<!-- 
-  Layout 继承逻辑：
-  Post (本文) -> Default (包含侧边栏逻辑的主题布局)
--->
 
-{% if page.author_profile or layout.author_profile or page.sidebar %}
-  <!-- 这里的逻辑是为了确保在文章页也能强制开启侧边栏 -->
-  {% assign author_profile = true %}
-{% endif %}
-
-<!-- 引入样式 -->
-<link rel="stylesheet" href="/assets/css/apple-style-for-blog.css">
-
-<!-- 文章主体容器 -->
-<article class="apple-content" style="padding: 20px 0;">
-  
-  <!-- 1. 文章头部 -->
+<article class="apple-content apple-article">
   <header class="apple-article-header">
     <h1 class="apple-article-title">{{ page.title }}</h1>
     <div class="apple-article-meta">
       <time datetime="{{ page.date | date_to_xmlschema }}">
         {{ page.date | date: "%B %d, %Y" }}
       </time>
-      {% if page.categories %}
-        <span style="margin: 0 10px;">•</span>
+      {% if page.categories and page.categories.size > 0 %}
+        <span aria-hidden="true"> | </span>
         <span>{{ page.categories | join: ", " }}</span>
       {% endif %}
     </div>
   </header>
 
-  <!-- 2. 正文内容 -->
   <div class="apple-article-body">
     {{ content }}
   </div>
 
-  <!-- 3. 简单的底部导航 -->
-  <hr style="border: 0; border-top: 1px solid #eee; margin: 50px 0;">
-  <div>
-    <a href="/blog/" style="color: #0066cc; text-decoration: none; font-weight: 500;">
-      ← Back to Blog
-    </a>
-  </div>
+  <footer class="apple-article-footer">
+    <a class="apple-back-link" href="{{ '/blog/' | relative_url }}">Back to Blog</a>
+  </footer>
 
-  <!-- 4. 文章页分享按钮（仅 posts 布局出现） -->
-  <button id="apple-share-button" class="apple-share-button" type="button" aria-label="Share current article">
-    分享
+  <button id="apple-share-button" class="apple-share-button" type="button" aria-label="Copy article link">
+    Share
   </button>
-
 </article>
-
-<style>
-  .apple-share-button {
-    position: fixed;
-    right: 24px;
-    bottom: 24px;
-    z-index: 1200;
-    border: 0;
-    border-radius: 999px;
-    background: #007aff;
-    color: #fff;
-    padding: 10px 16px;
-    font-size: 14px;
-    cursor: pointer;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
-  }
-
-  .apple-share-button:hover {
-    background: #0062cc;
-  }
-</style>
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
@@ -105,9 +62,9 @@ layout: default
     shareButton.addEventListener('click', function () {
       var originalText = shareButton.textContent;
       copyText(window.location.href).then(function () {
-        shareButton.textContent = '已复制链接';
+        shareButton.textContent = 'Copied';
       }).catch(function () {
-        shareButton.textContent = '复制失败';
+        shareButton.textContent = 'Copy failed';
       }).finally(function () {
         setTimeout(function () {
           shareButton.textContent = originalText;

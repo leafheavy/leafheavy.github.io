@@ -38,7 +38,7 @@
 .paper-box {
   display: flex;
   justify-content: flex-start;
-  align-items: stretch;
+  align-items: flex-start;
   flex-direction: row;
   flex-wrap: wrap;
   gap: 1.5rem;
@@ -63,9 +63,10 @@
       display: block;
       width: 100%;
       max-width: 400px;
+      height: auto;
       border: 1px solid $border-color;
       border-radius: 6px;
-      object-fit: cover;
+      object-fit: contain;
     }
   }
 
@@ -75,17 +76,24 @@
   }
 
   @include breakpoint($medium) {
+    display: block;
+    @include clearfix();
+
     .paper-box-image {
-      justify-content: flex-start;
+      display: block;
+      float: left;
+      width: 36%;
       min-width: 200px;
-      max-width: 36%;
-      order: 1;
+      max-width: 400px;
+      margin: 0 1.5rem 0.75rem 0;
+
+      img {
+        max-width: none;
+      }
     }
 
     .paper-box-text {
-      justify-content: flex-start;
-      max-width: calc(64% - 1.5rem);
-      order: 2;
+      max-width: 100%;
     }
   }
 }

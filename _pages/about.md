@@ -21,7 +21,7 @@ I'm Zhong Ye, a senior undergraduate student at Guangdong University of Technolo
 
 My research interests lie in the practical application of deep learning through mathematical modeling and implementation, specifically in Test-Time Adaptation (TTA), Continual Learning (CL), and AI for Science (Bioinformatics).
 
-# Publications
+# Publications {#publications}
 
 <div class='paper-box'><div class='paper-box-image'><div><div class="badge">AAAI 2026</div><img src='../images/papers/MT-TTA.png' alt="MT-TTA architecture" width="100%"></div></div>
 <div class='paper-box-text' markdown="1">
@@ -47,16 +47,16 @@ My research interests lie in the practical application of deep learning through 
 </div>
 </div>
 
-# Honors and Awards
+# Honors and Awards {#honors-and-awards}
 
 - *2024.12* **National Scholarship** *(China's highest honor for undergraduate students)*
 - *2024.11* **National Second Prize**, China Undergraduate Mathematical Contest in Modeling
 - *2024.08* **National First Prize**, 2024 RAICOM National Finals *(Team Leader)*
 
-# Education
+# Education {#education}
 
 - *2022.09 - 2026.06 (now)*, Undergraduate student at Guangdong University of Technology.
 
-# Internships
+# Internships {#internships}
 
 - *2025.09 - 2026.02*, Conducted optimization of few-shot speech recognition algorithms for out-of-vocabulary (OOV) circumstances, reducing the Error Rate (ER) by 8% on proprietary enterprise datasets. *Shenzhen NeoAI Future Technology Co., Ltd.*

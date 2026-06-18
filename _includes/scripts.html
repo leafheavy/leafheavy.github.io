@@ -1,4 +1,9 @@
 <script src="{{ "/assets/js/main.min.js" | relative_url }}"></script>
+<script>
+  $(document).ready(function () {
+    $(".masthead a").off("click.smoothscroll");
+  });
+</script>
 
 {% include analytics.html %}
 {% include fetch_google_scholar_stats.html %}

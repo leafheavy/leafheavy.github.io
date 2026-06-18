@@ -7,19 +7,19 @@ main:
   #   url: "/#-news"
 
   - title: "Publications"
-    url: "/#-publications"
+    url: "/#publications"
 
   - title: "Honors and Awards"
-    url: "/#-honors-and-awards"
+    url: "/#honors-and-awards"
 
   - title: "Educations"
-    url: "/#-educations"
+    url: "/#education"
 
   # - title: "Invited Talks"
   #   url: "/#-invited-talks"
 
   - title: "Internships"
-    url: "/#-internships"
+    url: "/#internships"
 
   - title: "Blog"
     url: /blog/

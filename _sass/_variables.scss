@@ -50,24 +50,24 @@ $type-size-8                : 0.625em;  // ~10px
    Colors
    ========================================================================== */
 
-$gray                       : #7a8288;
+$gray                       : #7d8b80;
 $dark-gray                  : mix(#000, $gray, 40%);
 $darker-gray                : mix(#000, $gray, 60%);
 $light-gray                 : mix(#fff, $gray, 50%);
 $lighter-gray               : mix(#fff, $gray, 90%);
 
-$body-color                 : #fff;
-$background-color           : #f7f8fb;
-$code-background-color      : #f3f5f8;
+$body-color                 : #fbfcf8;
+$background-color           : #f2f6ef;
+$code-background-color      : #eef4eb;
 $code-background-color-dark : $light-gray;
-$text-color                 : #242933;
-$border-color               : #e3e7ee;
+$text-color                 : #2f382f;
+$border-color               : #d8e1d2;
 
-$primary-color              : #51606f;
-$success-color              : #62c462;
-$warning-color              : #f89406;
-$danger-color               : #ee5f5b;
-$info-color                 : #235789;
+$primary-color              : #6f8f72;
+$success-color              : #7fa889;
+$warning-color              : #b7a06f;
+$danger-color               : #b98278;
+$info-color                 : #5f8066;
 // $info-color                 : #52adc8;
 
 /* brands */
@@ -151,7 +151,7 @@ $susy: (
    ========================================================================== */
 
 $border-radius              : 8px;
-$box-shadow                 : 0 10px 28px rgba(31, 41, 55, 0.08);
+$box-shadow                 : 0 10px 28px rgba(47, 56, 47, 0.08);
 $navicon-width              : 28px;
 $navicon-height             : 4px;
 $global-transition          : all 0.2s ease-in-out;

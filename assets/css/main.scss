@@ -116,7 +116,7 @@ h1:before,
   top: 0.75rem;
   left: 0.75rem;
   color: white;
-  background-color: #8a5a1f;
+  background-color: #87936f;
   border-radius: 6px;
   font-size: 0.78em;
   line-height: 1.2;
@@ -125,14 +125,14 @@ h1:before,
 /* Site-wide academic polish */
 
 :root {
-  --site-bg: #f7f8fb;
-  --site-surface: #ffffff;
-  --site-text: #242933;
-  --site-muted: #667085;
-  --site-border: #e3e7ee;
-  --site-accent: #235789;
-  --site-accent-soft: #e8f0fb;
-  --site-warm: #8a5a1f;
+  --site-bg: #f2f6ef;
+  --site-surface: #fbfcf8;
+  --site-text: #2f382f;
+  --site-muted: #728070;
+  --site-border: #d8e1d2;
+  --site-accent: #6f8f72;
+  --site-accent-soft: #e5eee1;
+  --site-warm: #87936f;
   --site-font: "Times New Roman", Times, "Songti SC", "SimSun", "Noto Serif CJK SC", serif;
 }
 
@@ -142,7 +142,7 @@ html {
 }
 
 body {
-  background: linear-gradient(180deg, #ffffff 0, var(--site-bg) 460px);
+  background: linear-gradient(180deg, #fbfcf8 0, var(--site-bg) 460px);
   color: var(--site-text);
   font-family: var(--site-font);
   letter-spacing: 0;
@@ -163,12 +163,12 @@ a {
 }
 
 a:hover {
-  color: #173f64;
+  color: #526f55;
 }
 
 ::selection {
-  background: #d8e7fa;
-  color: #111827;
+  background: #dcebd8;
+  color: #263126;
 }
 
 #main {
@@ -184,11 +184,11 @@ a:hover {
   position: sticky;
   top: 0;
   z-index: 9999;
-  background-color: rgba(255, 255, 255, 0.86);
+  background-color: rgba(251, 252, 248, 0.88);
   -webkit-backdrop-filter: saturate(160%) blur(14px);
   backdrop-filter: saturate(160%) blur(14px);
-  border-bottom: 1px solid rgba(226, 232, 240, 0.9);
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+  border-bottom: 1px solid rgba(216, 225, 210, 0.95);
+  box-shadow: 0 8px 24px rgba(47, 56, 47, 0.05);
   -webkit-transform: translateZ(0);
           transform: translateZ(0);
 }
@@ -207,7 +207,7 @@ a:hover {
 .header-nav a,
 .nav a,
 .navigation a {
-  color: #293241;
+  color: #344034;
   font-weight: 600;
   letter-spacing: 0;
   text-transform: none;
@@ -251,7 +251,7 @@ a:hover {
 .page__content h2,
 .page__content h3,
 .archive__subtitle {
-  color: #1d2430;
+  color: #273226;
   letter-spacing: 0;
 }
 
@@ -267,7 +267,7 @@ a:hover {
 
 .page__content p,
 .page__content li {
-  color: #2b313c;
+  color: #333c33;
 }
 
 .page__content a {
@@ -283,8 +283,8 @@ figure img {
 blockquote {
   margin-left: 0;
   padding: 0.8rem 1rem;
-  color: #374151;
-  background: #f3f6fa;
+  color: #435045;
+  background: #eef4eb;
   border-left: 3px solid var(--site-accent);
   border-radius: 0 8px 8px 0;
 }
@@ -294,7 +294,7 @@ a > code,
 li > code,
 figcaption > code,
 td > code {
-  background: #f3f5f8;
+  background: #eef4eb;
   border-color: var(--site-border);
   box-shadow: none;
 }
@@ -306,7 +306,7 @@ table {
 }
 
 thead {
-  background: #eef3f8;
+  background: #e8f0e4;
 }
 
 td {
@@ -319,7 +319,7 @@ td {
 
 .profile_box {
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.74);
+  background: rgba(251, 252, 248, 0.78);
   border: 1px solid var(--site-border);
   border-radius: 8px;
 }
@@ -331,7 +331,7 @@ td {
 }
 
 .sidebar .author__name {
-  color: #1d2430;
+  color: #273226;
   letter-spacing: 0;
 }
 
@@ -342,7 +342,7 @@ td {
 
 .author__urls a,
 .author__urls_sm a {
-  color: #344054;
+  color: #415041;
 }
 
 .author__urls a:hover,
@@ -361,12 +361,12 @@ td {
 }
 
 .paper-box:hover {
-  border-color: #c8d5e4;
-  box-shadow: 0 12px 30px rgba(31, 41, 55, 0.08);
+  border-color: #c4d3bd;
+  box-shadow: 0 12px 30px rgba(47, 56, 47, 0.08);
 }
 
 .archive__item-title a {
-  color: #1f2937;
+  color: #2d372d;
   text-decoration: none;
 }
 
@@ -391,7 +391,7 @@ figcaption {
   .site-header,
   .header-nav,
   .site-nav {
-    background-color: rgba(255, 255, 255, 0.96);
+    background-color: rgba(251, 252, 248, 0.96);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }

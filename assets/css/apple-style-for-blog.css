@@ -1,14 +1,14 @@
 /* Blog and article refinements */
 
 :root {
-  --site-bg: #f7f8fb;
-  --site-surface: #ffffff;
-  --site-text: #242933;
-  --site-muted: #667085;
-  --site-border: #e3e7ee;
-  --site-accent: #235789;
-  --site-accent-soft: #e8f0fb;
-  --site-warm: #8a5a1f;
+  --site-bg: #f2f6ef;
+  --site-surface: #fbfcf8;
+  --site-text: #2f382f;
+  --site-muted: #728070;
+  --site-border: #d8e1d2;
+  --site-accent: #6f8f72;
+  --site-accent-soft: #e5eee1;
+  --site-warm: #87936f;
   --site-font: "Times New Roman", Times, "Songti SC", "SimSun", "Noto Serif CJK SC", serif;
   --mono-font: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
 }
@@ -52,7 +52,7 @@
 
 .apple-hero-title {
   margin: 0;
-  color: #1d2430;
+  color: #273226;
   font-family: var(--site-font);
   font-size: 2.35rem;
   font-weight: 700;
@@ -89,8 +89,8 @@
 
 .apple-search-input:focus {
   outline: none;
-  border-color: #9db7d7;
-  box-shadow: 0 0 0 3px rgba(35, 87, 137, 0.12);
+  border-color: #aebfa8;
+  box-shadow: 0 0 0 3px rgba(111, 143, 114, 0.16);
 }
 
 .apple-post-list {
@@ -111,8 +111,8 @@
 }
 
 .apple-post-card:hover {
-  border-color: #c8d5e4;
-  box-shadow: 0 12px 30px rgba(31, 41, 55, 0.08);
+  border-color: #c4d3bd;
+  box-shadow: 0 12px 30px rgba(47, 56, 47, 0.08);
   transform: translateY(-1px);
 }
 
@@ -128,7 +128,7 @@
 
 .apple-card-title {
   margin: 0 0 0.45rem;
-  color: #1f2937;
+  color: #2d372d;
   font-size: 1.28rem;
   font-weight: 700;
   line-height: 1.35;
@@ -176,7 +176,7 @@
 
 .apple-article-title {
   margin: 0 0 0.65rem;
-  color: #1d2430;
+  color: #273226;
   font-size: 2.35rem;
   font-weight: 700;
   line-height: 1.14;
@@ -191,7 +191,7 @@
 }
 
 .apple-article-body {
-  color: #242933;
+  color: #2f382f;
   font-size: 1.08rem;
   line-height: 1.84;
   letter-spacing: 0;
@@ -213,7 +213,7 @@
 .apple-article-body h4 {
   margin-top: 1.8em;
   margin-bottom: 0.55em;
-  color: #1d2430;
+  color: #273226;
   line-height: 1.32;
   letter-spacing: 0;
 }
@@ -244,15 +244,15 @@
 .apple-article-body blockquote {
   margin-left: 0;
   padding: 0.8rem 1rem;
-  color: #374151;
-  background: #f3f6fa;
+  color: #435045;
+  background: #eef4eb;
   border-left: 3px solid var(--site-accent);
   border-radius: 0 8px 8px 0;
 }
 
 .apple-article-body :not(pre) > code {
   padding: 0.12em 0.32em;
-  background: #f3f5f8;
+  background: #eef4eb;
   border: 1px solid var(--site-border);
   border-radius: 6px;
   font-family: var(--mono-font);
@@ -263,7 +263,7 @@
   margin: 1.4rem 0;
   padding: 1rem;
   overflow-x: auto;
-  background: #f3f5f8;
+  background: #eef4eb;
   border: 1px solid var(--site-border);
   border-radius: 8px;
 }
@@ -306,7 +306,7 @@
   background: var(--site-accent);
   border: 0;
   border-radius: 8px;
-  box-shadow: 0 12px 28px rgba(35, 87, 137, 0.22);
+  box-shadow: 0 12px 28px rgba(111, 143, 114, 0.24);
   cursor: pointer;
   font-family: var(--site-font);
   font-size: 0.95rem;
@@ -314,7 +314,7 @@
 }
 
 .apple-share-button:hover {
-  background: #173f64;
+  background: #526f55;
 }
 
 .table-of-contents,

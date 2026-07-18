@@ -74,8 +74,15 @@
   margin-bottom: 1.1rem;
 }
 
+.apple-search-controls {
+  display: flex;
+  gap: 0.65rem;
+  align-items: center;
+}
+
 .apple-search-input {
-  width: 100%;
+  min-width: 0;
+  flex: 1;
   padding: 0.78rem 0.9rem;
   color: var(--site-text);
   background: var(--site-surface);
@@ -91,6 +98,34 @@
   outline: none;
   border-color: #aebfa8;
   box-shadow: 0 0 0 3px rgba(111, 143, 114, 0.16);
+}
+
+.apple-search-clear,
+.apple-export-button {
+  padding: 0.7rem 0.9rem;
+  color: #415041;
+  background: var(--site-surface);
+  border: 1px solid var(--site-border);
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: var(--site-font);
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.apple-search-clear:hover,
+.apple-export-button:hover {
+  color: #fff;
+  background: var(--site-accent);
+  border-color: var(--site-accent);
+}
+
+.apple-search-status {
+  min-height: 1.5em;
+  margin: 0.55rem 0 0;
+  color: var(--site-muted);
+  font-size: 0.9rem;
 }
 
 .apple-post-list {
@@ -146,24 +181,8 @@
   -webkit-line-clamp: 2;
 }
 
-#main.main--post .page {
-  float: none;
-  width: 100%;
-  max-width: 100%;
-  margin-right: 0;
-  margin-left: 0;
-  padding-right: 0;
-  padding-left: 0;
-}
-
-#main.main--post .page__inner-wrap,
-#main.main--post .page__content {
-  float: none;
-  width: 100%;
-}
-
 .apple-article {
-  max-width: 860px;
+  max-width: 100%;
   margin-top: 0;
   padding-top: 1rem;
 }
@@ -188,6 +207,97 @@
   font-size: 0.96rem;
   line-height: 1.5;
   letter-spacing: 0;
+}
+
+.apple-export-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 1rem;
+}
+
+.apple-export-button {
+  padding: 0.55rem 0.75rem;
+}
+
+.apple-recommendation-sidebar .profile_box {
+  display: block;
+}
+
+.apple-recommendation-heading {
+  margin-bottom: 0.9rem;
+}
+
+.apple-recommendation-kicker {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--site-accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.apple-recommendation-heading h3 {
+  margin: 0;
+  color: #273226;
+  font-family: var(--site-font);
+  font-size: 1.05rem;
+  line-height: 1.4;
+}
+
+.apple-recommendation-heading p {
+  margin: 0.45rem 0 0;
+  color: var(--site-muted);
+  font-family: var(--site-font);
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.apple-recommendation-list {
+  display: grid;
+  gap: 0.7rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: recommendations;
+}
+
+.apple-recommendation-list li {
+  position: relative;
+  min-height: 2.5rem;
+  padding: 0.05rem 0 0.05rem 1.85rem;
+  counter-increment: recommendations;
+}
+
+.apple-recommendation-list li::before {
+  position: absolute;
+  top: 0.1rem;
+  left: 0;
+  width: 1.3rem;
+  height: 1.3rem;
+  color: #526f55;
+  background: var(--site-accent-soft);
+  border-radius: 50%;
+  content: counter(recommendations);
+  font-family: var(--site-font);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.3rem;
+  text-align: center;
+}
+
+.apple-recommendation-list a {
+  color: #415041;
+  font-family: var(--site-font);
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-decoration: none;
+}
+
+.apple-recommendation-list a:hover {
+  color: var(--site-accent);
+  text-decoration: underline;
 }
 
 .apple-article-body {
@@ -436,5 +546,45 @@
   .apple-share-button {
     right: 1rem;
     bottom: 1rem;
+  }
+
+  .apple-search-controls {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .apple-search-clear {
+    width: 100%;
+  }
+}
+
+@media print {
+  .masthead,
+  .sidebar,
+  .page__footer,
+  .apple-share-button,
+  .apple-article-footer,
+  .apple-export-actions {
+    display: none !important;
+  }
+
+  body,
+  #main,
+  .page,
+  .page__inner-wrap,
+  .page__content,
+  .apple-content,
+  .apple-article {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  .apple-article-body {
+    font-size: 11pt;
+    line-height: 1.6;
   }
 }

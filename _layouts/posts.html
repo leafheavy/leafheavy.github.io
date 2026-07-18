@@ -9,10 +9,14 @@ layout: default
       <time datetime="{{ page.date | date_to_xmlschema }}">
         {{ page.date | date: "%B %d, %Y" }}
       </time>
-      {% if page.categories and page.categories.size > 0 %}
+      {% if page.tags and page.tags.size > 0 %}
         <span aria-hidden="true"> | </span>
-        <span>{{ page.categories | join: ", " }}</span>
+        <span>{{ page.tags | join: ", " }}</span>
       {% endif %}
+    </div>
+    <div class="apple-export-actions" aria-label="导出文章">
+      <button class="apple-export-button" id="export-markdown" type="button">导出 Markdown</button>
+      <button class="apple-export-button" id="export-pdf" type="button">导出 PDF</button>
     </div>
   </header>
 
@@ -29,8 +33,129 @@ layout: default
   </button>
 </article>
 
+<script id="post-markdown-source" type="application/json">{{ page.content | jsonify }}</script>
+
 <script>
   document.addEventListener('DOMContentLoaded', function () {
+    function getJson(id, fallback) {
+      var element = document.getElementById(id);
+      if (!element) return fallback;
+      try {
+        return JSON.parse(element.textContent);
+      } catch (error) {
+        return fallback;
+      }
+    }
+
+    function normalize(value) {
+      return String(value || '').toLocaleLowerCase().replace(/[^\w\u3400-\u9fff]+/g, ' ').trim();
+    }
+
+    function titleTerms(title) {
+      return normalize(title).split(/\s+/).filter(function (term) {
+        return term.length > 1;
+      });
+    }
+
+    function scorePost(currentPost, candidate) {
+      var score = 0;
+      var currentTags = (currentPost.tags || []).map(normalize).filter(Boolean);
+      var candidateTags = (candidate.tags || []).map(normalize).filter(Boolean);
+      var currentTitle = normalize(currentPost.title);
+      var candidateTitle = normalize(candidate.title);
+
+      currentTags.forEach(function (tag) {
+        candidateTags.forEach(function (candidateTag) {
+          if (tag === candidateTag) score += 100;
+          else if (tag.indexOf(candidateTag) !== -1 || candidateTag.indexOf(tag) !== -1) score += 30;
+        });
+      });
+
+      if (currentTitle && candidateTitle && (currentTitle.indexOf(candidateTitle) !== -1 || candidateTitle.indexOf(currentTitle) !== -1)) {
+        score += 40;
+      }
+
+      var currentTerms = titleTerms(currentPost.title);
+      var candidateTerms = titleTerms(candidate.title);
+      currentTerms.forEach(function (term) {
+        if (candidateTerms.indexOf(term) !== -1) score += 12;
+      });
+
+      return score;
+    }
+
+    function renderRecommendations() {
+      var list = document.getElementById('blog-recommendations');
+      var currentPost = getJson('current-post-data', {});
+      var posts = getJson('all-posts-data', []);
+      if (!list || !currentPost.url || !posts.length) return;
+
+      posts.filter(function (post) {
+        return post.url !== currentPost.url;
+      }).map(function (post) {
+        post.score = scorePost(currentPost, post);
+        return post;
+      }).sort(function (first, second) {
+        return second.score - first.score || String(second.date).localeCompare(String(first.date));
+      }).slice(0, 3).forEach(function (post) {
+        var item = document.createElement('li');
+        var link = document.createElement('a');
+        link.href = post.url;
+        link.textContent = post.title;
+        item.appendChild(link);
+        list.appendChild(item);
+      });
+    }
+
+    function markdownFileName(title) {
+      return String(title || 'blog').replace(/[\\/:*?"<>|]/g, '-').trim() || 'blog';
+    }
+
+    function downloadMarkdown() {
+      var source = getJson('post-markdown-source', '');
+      var title = {{ page.title | jsonify }};
+      var date = {{ page.date | date_to_xmlschema | jsonify }};
+      var tags = {{ page.tags | default: empty | jsonify }};
+      var frontMatter = [
+        '---',
+        'title: ' + JSON.stringify(title),
+        'date: ' + date,
+        'tags:'
+      ];
+
+      (tags || []).forEach(function (tag) {
+        frontMatter.push('  - ' + JSON.stringify(tag));
+      });
+      frontMatter.push('---', '');
+
+      var blob = new Blob([frontMatter.join('\n') + String(source || '')], { type: 'text/markdown;charset=utf-8' });
+      var url = URL.createObjectURL(blob);
+      var link = document.createElement('a');
+      link.href = url;
+      link.download = markdownFileName(title) + '.md';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.setTimeout(function () { URL.revokeObjectURL(url); }, 0);
+    }
+
+    function printArticle() {
+      document.body.classList.add('is-printing-article');
+      window.print();
+    }
+
+    renderRecommendations();
+
+    var markdownButton = document.getElementById('export-markdown');
+    if (markdownButton) markdownButton.addEventListener('click', downloadMarkdown);
+
+    var pdfButton = document.getElementById('export-pdf');
+    if (pdfButton) pdfButton.addEventListener('click', printArticle);
+
+    window.addEventListener('afterprint', function () {
+      document.body.classList.remove('is-printing-article');
+    });
+
     var shareButton = document.getElementById('apple-share-button');
     if (!shareButton) return;
 

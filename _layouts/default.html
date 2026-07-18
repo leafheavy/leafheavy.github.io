@@ -16,9 +16,11 @@ layout: compress
 
     {% assign is_post_page = page.collection == 'posts' or page.layout == 'posts' %}
     <div id="main" role="main"{% if is_post_page %} class="main--post"{% endif %}>
-      {% unless is_post_page %}
+      {% if is_post_page %}
+        {% include post-recommendations.html %}
+      {% else %}
         {% include sidebar.html %}
-      {% endunless %}
+      {% endif %}
     
       <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
         {% if page.title %}<meta itemprop="headline" content="{{ page.title | markdownify | strip_html | strip_newlines | escape_once }}">{% endif %}

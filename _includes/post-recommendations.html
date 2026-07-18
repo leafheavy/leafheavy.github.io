@@ -1,0 +1,26 @@
+<aside class="sidebar sticky apple-recommendation-sidebar" aria-label="你可能感兴趣的 Blog 推荐">
+  <div class="profile_box apple-recommendation-box">
+    <div class="apple-recommendation-heading">
+      <span class="apple-recommendation-kicker">继续阅读</span>
+      <h3>你可能感兴趣的 Blog 推荐</h3>
+      <p>根据标题和标签为你挑选</p>
+    </div>
+    <ol id="blog-recommendations" class="apple-recommendation-list" aria-live="polite"></ol>
+  </div>
+</aside>
+
+<script id="current-post-data" type="application/json">{
+  "url": {{ page.url | jsonify }},
+  "title": {{ page.title | jsonify }},
+  "tags": {{ page.tags | default: empty | jsonify }}
+}</script>
+<script id="all-posts-data" type="application/json">[
+  {% for post in site.posts %}
+    {
+      "url": {{ post.url | jsonify }},
+      "title": {{ post.title | jsonify }},
+      "tags": {{ post.tags | default: empty | jsonify }},
+      "date": {{ post.date | date_to_xmlschema | jsonify }}
+    }{% unless forloop.last %},{% endunless %}
+  {% endfor %}
+]</script>

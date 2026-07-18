@@ -151,6 +151,14 @@
   transform: translateY(-1px);
 }
 
+.apple-post-card[hidden] {
+  display: none !important;
+}
+
+.apple-post-card.is-search-hidden {
+  display: none !important;
+}
+
 .apple-card-date {
   display: block;
   margin-bottom: 0.4rem;
@@ -298,6 +306,28 @@
 .apple-recommendation-list a:hover {
   color: var(--site-accent);
   text-decoration: underline;
+}
+
+@media (min-width: 1024px) {
+  #main.main--post {
+    display: grid;
+    grid-template-columns: minmax(190px, 2.5fr) minmax(0, 9.5fr);
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  #main.main--post .sidebar {
+    float: none;
+    width: auto;
+    margin: 0;
+  }
+
+  #main.main--post .page {
+    float: none;
+    width: auto;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 .apple-article-body {

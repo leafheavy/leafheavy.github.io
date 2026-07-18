@@ -5,7 +5,12 @@
       <h3>你可能感兴趣的 Blog 推荐</h3>
       <p>根据标题和标签为你挑选</p>
     </div>
-    <ol id="blog-recommendations" class="apple-recommendation-list" aria-live="polite"></ol>
+    <ol id="blog-recommendations" class="apple-recommendation-list" aria-live="polite">
+      {% assign other_posts = site.posts | where_exp: "post", "post.url != page.url" %}
+      {% for post in other_posts limit: 3 %}
+        <li><a href="{{ post.url | relative_url }}" target="_self">{{ post.title }}</a></li>
+      {% endfor %}
+    </ol>
   </div>
 </aside>
 

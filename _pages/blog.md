@@ -61,7 +61,12 @@ author_profile: true
       var visibleCount = 0;
       cards.forEach(function (card) {
         var matches = !keyword || normalize(card.textContent).indexOf(keyword) !== -1;
-        card.hidden = !matches;
+        card.classList.toggle('is-search-hidden', !matches);
+        if (matches) {
+          card.style.removeProperty('display');
+        } else {
+          card.style.setProperty('display', 'none', 'important');
+        }
         if (matches) visibleCount += 1;
       });
       clearButton.hidden = !keyword;

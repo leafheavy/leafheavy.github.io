@@ -332,6 +332,24 @@
     });
   }
 
+  function wrapDisplayMathForScrolling() {
+    var blocks = document.querySelectorAll('.apple-article-body mjx-container[display="true"]');
+
+    blocks.forEach(function (block) {
+      if (block.parentElement && block.parentElement.classList.contains('apple-math-scroll')) {
+        return;
+      }
+
+      var wrapper = document.createElement('div');
+      wrapper.className = 'apple-math-scroll';
+      wrapper.tabIndex = 0;
+      wrapper.setAttribute('role', 'region');
+      wrapper.setAttribute('aria-label', 'Scrollable equation');
+      block.parentNode.insertBefore(wrapper, block);
+      wrapper.appendChild(block);
+    });
+  }
+
   function normalizeCodeLanguageClasses() {
     var nodes = document.querySelectorAll('pre[class], code[class], div[class], figure[class]');
     var knownLanguages = ['latex', 'python'];
@@ -431,6 +449,7 @@
       startup: {
         pageReady: function () {
           return MathJax.startup.defaultPageReady().then(function () {
+            wrapDisplayMathForScrolling();
             applyAppleEquationNumbers();
           });
         }
@@ -467,6 +486,7 @@
 
     if (window.MathJax && MathJax.typesetPromise) {
       MathJax.typesetPromise().then(function () {
+        wrapDisplayMathForScrolling();
         applyAppleEquationNumbers();
       });
     }

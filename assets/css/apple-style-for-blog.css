@@ -496,9 +496,41 @@
   display: block;
   margin: 1.4em 0 !important;
   padding: 0.2em 0;
+}
+
+/*
+ * MathJax display equations use an intrinsic-width inner element.  Keeping
+ * the scroll area outside that element makes overflow reliably measurable,
+ * so a horizontal scrollbar is shown only when an equation is wider than the
+ * article column.
+ */
+.apple-article-body .apple-math-scroll {
+  display: block;
+  max-width: 100%;
+  margin: 1.4em 0;
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #aeb5ad transparent;
+}
+
+.apple-article-body .apple-math-scroll::-webkit-scrollbar {
+  height: 0.7rem;
+}
+
+.apple-article-body .apple-math-scroll::-webkit-scrollbar-thumb {
+  background: #aeb5ad;
+  border: 0.2rem solid transparent;
+  border-radius: 999px;
+  background-clip: content-box;
+}
+
+.apple-article-body .apple-math-scroll > mjx-container[display="true"] {
+  width: max-content;
+  min-width: 100%;
+  max-width: none;
+  margin: 0 !important;
 }
 
 .apple-article-body mjx-container[display="true"] mjx-math {

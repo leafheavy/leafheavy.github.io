@@ -491,17 +491,20 @@
   pointer-events: none !important;
 }
 
-.apple-article-body .MathJax_Display {
+.apple-article-body .MathJax_Display,
+.page__content .MathJax_Display {
   display: block !important;
   margin: 1.25em 0 !important;
   overflow-x: auto;
 }
 
-.apple-article-body mjx-container {
+.apple-article-body mjx-container,
+.page__content mjx-container {
   max-width: 100%;
 }
 
-.apple-article-body mjx-container[display="true"] {
+.apple-article-body mjx-container[display="true"],
+.page__content mjx-container[display="true"] {
   display: block;
   margin: 1.4em 0 !important;
   padding: 0.2em 0;
@@ -513,7 +516,8 @@
  * so a horizontal scrollbar is shown only when an equation is wider than the
  * article column.
  */
-.apple-article-body .apple-math-scroll {
+.apple-article-body .apple-math-scroll,
+.page__content .apple-math-scroll {
   display: block;
   box-sizing: border-box;
   width: 100%;
@@ -527,29 +531,34 @@
   scrollbar-color: #aeb5ad transparent;
 }
 
-.apple-article-body .apple-math-scroll.is-overflowing {
+.apple-article-body .apple-math-scroll.is-overflowing,
+.page__content .apple-math-scroll.is-overflowing {
   overflow-x: scroll;
 }
 
-.apple-article-body .apple-math-scroll::-webkit-scrollbar {
+.apple-article-body .apple-math-scroll::-webkit-scrollbar,
+.page__content .apple-math-scroll::-webkit-scrollbar {
   height: 0.7rem;
 }
 
-.apple-article-body .apple-math-scroll::-webkit-scrollbar-thumb {
+.apple-article-body .apple-math-scroll::-webkit-scrollbar-thumb,
+.page__content .apple-math-scroll::-webkit-scrollbar-thumb {
   background: #aeb5ad;
   border: 0.2rem solid transparent;
   border-radius: 999px;
   background-clip: content-box;
 }
 
-.apple-article-body .apple-math-scroll > mjx-container {
+.apple-article-body .apple-math-scroll > mjx-container,
+.page__content .apple-math-scroll > mjx-container {
   width: max-content;
   min-width: 100%;
   max-width: none;
   margin: 0 !important;
 }
 
-.apple-article-body .apple-math-scroll > mjx-container > mjx-math {
+.apple-article-body .apple-math-scroll > mjx-container > mjx-math,
+.page__content .apple-math-scroll > mjx-container > mjx-math {
   display: inline-block !important;
   box-sizing: border-box;
   width: max-content !important;
@@ -557,18 +566,21 @@
   text-align: center;
 }
 
-.apple-article-body .apple-math-scroll mjx-tag {
+.apple-article-body .apple-math-scroll mjx-tag,
+.page__content .apple-math-scroll mjx-tag {
   color: var(--site-muted);
   font-family: var(--site-font);
   font-size: 0.9em;
 }
 
-.apple-article-body .apple-equation-block {
+.apple-article-body .apple-equation-block,
+.page__content .apple-equation-block {
   position: relative;
   padding-right: 3.2em;
 }
 
-.apple-article-body .apple-equation-number {
+.apple-article-body .apple-equation-number,
+.page__content .apple-equation-number {
   position: absolute;
   top: 50%;
   right: 0;

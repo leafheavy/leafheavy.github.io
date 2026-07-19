@@ -310,13 +310,19 @@
   }
 
   function getDisplayMathBlocks() {
-    return Array.from(document.querySelectorAll('.apple-article-body mjx-container')).filter(function (block) {
+    return Array.from(document.querySelectorAll('.apple-article-body mjx-container, .page__content mjx-container')).filter(function (block) {
       if (block.getAttribute('display') === 'true') {
         return true;
       }
 
       var parent = block.parentElement;
-      return parent && parent.clientWidth > 0 && block.clientWidth >= parent.clientWidth - 1;
+      if (!parent) {
+        return false;
+      }
+
+      var blockWidth = block.getBoundingClientRect().width;
+      var parentWidth = parent.getBoundingClientRect().width;
+      return parentWidth > 0 && blockWidth >= parentWidth - 1;
     });
   }
 
@@ -364,7 +370,7 @@
   }
 
   function updateDisplayMathScrollbars() {
-    var wrappers = document.querySelectorAll('.apple-article-body .apple-math-scroll');
+    var wrappers = document.querySelectorAll('.apple-article-body .apple-math-scroll, .page__content .apple-math-scroll');
 
     wrappers.forEach(function (wrapper) {
       var isOverflowing = wrapper.scrollWidth > wrapper.clientWidth + 1;

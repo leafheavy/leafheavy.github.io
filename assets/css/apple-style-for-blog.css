@@ -573,23 +573,6 @@
   font-size: 0.9em;
 }
 
-.apple-article-body .apple-equation-block,
-.page__content .apple-equation-block {
-  position: relative;
-  padding-right: 3.2em;
-}
-
-.apple-article-body .apple-equation-number,
-.page__content .apple-equation-number {
-  position: absolute;
-  top: 50%;
-  right: 0;
-  color: var(--site-muted);
-  font-family: var(--site-font);
-  font-size: 0.9em;
-  transform: translateY(-50%);
-}
-
 .apple-article-body div.highlighter-rouge:before,
 .apple-article-body figure.highlight:before {
   display: none !important;

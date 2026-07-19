@@ -326,29 +326,6 @@
     });
   }
 
-  function applyAppleEquationNumbers() {
-    var blocks = getDisplayMathBlocks();
-    var counter = 0;
-
-    blocks.forEach(function (block) {
-      var hasMathJaxTag = block.querySelector('mjx-tag') || block.querySelector('.mjx-tag');
-      block.classList.add('apple-equation-block');
-
-      if (hasMathJaxTag) {
-        return;
-      }
-
-      counter += 1;
-      var numberEl = block.querySelector('.apple-equation-number');
-      if (!numberEl) {
-        numberEl = document.createElement('span');
-        numberEl.className = 'apple-equation-number';
-        block.appendChild(numberEl);
-      }
-      numberEl.textContent = '(' + counter + ')';
-    });
-  }
-
   function wrapDisplayMathForScrolling() {
     var blocks = getDisplayMathBlocks();
 
@@ -489,7 +466,6 @@
         pageReady: function () {
           return MathJax.startup.defaultPageReady().then(function () {
             wrapDisplayMathForScrolling();
-            applyAppleEquationNumbers();
             watchDisplayMathScrollbars();
           });
         }
@@ -527,7 +503,6 @@
     if (window.MathJax && MathJax.typesetPromise) {
       MathJax.typesetPromise().then(function () {
         wrapDisplayMathForScrolling();
-        applyAppleEquationNumbers();
         watchDisplayMathScrollbars();
       });
     }

@@ -508,11 +508,15 @@
   display: block;
   max-width: 100%;
   margin: 1.4em 0;
-  overflow-x: auto;
+  overflow-x: hidden;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   scrollbar-color: #aeb5ad transparent;
+}
+
+.apple-article-body .apple-math-scroll.is-overflowing {
+  overflow-x: scroll;
 }
 
 .apple-article-body .apple-math-scroll::-webkit-scrollbar {
@@ -533,8 +537,12 @@
   margin: 0 !important;
 }
 
-.apple-article-body mjx-container[display="true"] mjx-math {
-  justify-content: center;
+.apple-article-body .apple-math-scroll > mjx-container[display="true"] > mjx-math {
+  display: inline-block !important;
+  box-sizing: border-box;
+  width: max-content !important;
+  min-width: 100%;
+  text-align: center;
 }
 
 .apple-article-body mjx-container[display="true"] mjx-tag {

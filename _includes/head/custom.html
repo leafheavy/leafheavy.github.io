@@ -348,6 +348,28 @@
       block.parentNode.insertBefore(wrapper, block);
       wrapper.appendChild(block);
     });
+
+    window.requestAnimationFrame(updateDisplayMathScrollbars);
+  }
+
+  function updateDisplayMathScrollbars() {
+    var wrappers = document.querySelectorAll('.apple-article-body .apple-math-scroll');
+
+    wrappers.forEach(function (wrapper) {
+      var isOverflowing = wrapper.scrollWidth > wrapper.clientWidth + 1;
+      wrapper.classList.toggle('is-overflowing', isOverflowing);
+    });
+  }
+
+  function watchDisplayMathScrollbars() {
+    if (window.__appleMathScrollbarWatcher) {
+      return;
+    }
+    window.__appleMathScrollbarWatcher = true;
+
+    window.addEventListener('resize', function () {
+      window.requestAnimationFrame(updateDisplayMathScrollbars);
+    });
   }
 
   function normalizeCodeLanguageClasses() {
@@ -451,6 +473,7 @@
           return MathJax.startup.defaultPageReady().then(function () {
             wrapDisplayMathForScrolling();
             applyAppleEquationNumbers();
+            watchDisplayMathScrollbars();
           });
         }
       }
@@ -488,6 +511,7 @@
       MathJax.typesetPromise().then(function () {
         wrapDisplayMathForScrolling();
         applyAppleEquationNumbers();
+        watchDisplayMathScrollbars();
       });
     }
   }

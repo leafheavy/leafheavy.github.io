@@ -309,8 +309,19 @@
     });
   }
 
+  function getDisplayMathBlocks() {
+    return Array.from(document.querySelectorAll('.apple-article-body mjx-container')).filter(function (block) {
+      if (block.getAttribute('display') === 'true') {
+        return true;
+      }
+
+      var parent = block.parentElement;
+      return parent && parent.clientWidth > 0 && block.clientWidth >= parent.clientWidth - 1;
+    });
+  }
+
   function applyAppleEquationNumbers() {
-    var blocks = document.querySelectorAll('.apple-article-body mjx-container[display="true"]');
+    var blocks = getDisplayMathBlocks();
     var counter = 0;
 
     blocks.forEach(function (block) {
@@ -333,7 +344,7 @@
   }
 
   function wrapDisplayMathForScrolling() {
-    var blocks = document.querySelectorAll('.apple-article-body mjx-container[display="true"]');
+    var blocks = getDisplayMathBlocks();
 
     blocks.forEach(function (block) {
       if (block.parentElement && block.parentElement.classList.contains('apple-math-scroll')) {

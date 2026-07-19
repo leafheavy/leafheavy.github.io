@@ -542,14 +542,14 @@
   background-clip: content-box;
 }
 
-.apple-article-body .apple-math-scroll > mjx-container[display="true"] {
+.apple-article-body .apple-math-scroll > mjx-container {
   width: max-content;
   min-width: 100%;
   max-width: none;
   margin: 0 !important;
 }
 
-.apple-article-body .apple-math-scroll > mjx-container[display="true"] > mjx-math {
+.apple-article-body .apple-math-scroll > mjx-container > mjx-math {
   display: inline-block !important;
   box-sizing: border-box;
   width: max-content !important;
@@ -557,7 +557,7 @@
   text-align: center;
 }
 
-.apple-article-body mjx-container[display="true"] mjx-tag {
+.apple-article-body .apple-math-scroll mjx-tag {
   color: var(--site-muted);
   font-family: var(--site-font);
   font-size: 0.9em;

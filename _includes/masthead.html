@@ -4,9 +4,9 @@
       <nav id="site-nav" class="greedy-nav">
         <button type="button" class="hidden" aria-label="Toggle navigation menu" aria-expanded="false"><div class="navicon"></div></button>
         <ul class="visible-links">
-          <li class="masthead__menu-item masthead__menu-item--lg masthead__menu-home-item"><a href="#about-me">Homepage</a></li>
+          <li class="masthead__menu-item masthead__menu-item--lg masthead__menu-home-item"><a href="{{ '/#about-me' | relative_url }}">Homepage</a></li>
           {% for link in site.data.navigation.main %}
-            <li class="masthead__menu-item"><a href="{{ domain }}{{ link.url }}">{{ link.title }}</a></li>
+            <li class="masthead__menu-item{% if link.url == '/weekly-plan/' %} masthead__menu-item--weekly{% endif %}"><a href="{{ link.url | relative_url }}"{% if page.url == link.url %} aria-current="page"{% endif %}>{{ link.title }}</a></li>
           {% endfor %}
         </ul>
         <ul class="hidden-links hidden"></ul>

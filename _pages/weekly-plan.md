@@ -48,7 +48,7 @@ author_profile: true
       <p class="weekly-plan-board__status" data-weekly-plan-board-status>0 plans</p>
     </div>
 
-    <form class="weekly-plan-form" data-weekly-plan-form>
+    <form class="weekly-plan-form" data-weekly-plan-form hidden>
       <label class="screen-reader-text" for="weekly-plan-input">Add a plan for this week</label>
       <input id="weekly-plan-input" name="plan" type="text" maxlength="180" autocomplete="off" placeholder="Add a plan for this week…" data-weekly-plan-input required>
       <button type="submit">Add plan</button>
@@ -65,8 +65,60 @@ author_profile: true
     <ul class="weekly-plan-list" data-weekly-plan-list aria-live="polite"></ul>
   </section>
 
-  <p class="weekly-plan-storage-note">
-    <i class="fas fa-lock" aria-hidden="true"></i>
-    Plans are saved privately in this browser and stay in their original week.
-  </p>
+  <div class="weekly-plan-access">
+    <p class="weekly-plan-storage-note">
+      <i class="fab fa-github" aria-hidden="true"></i>
+      Published from GitHub. Public visitors have read-only access.
+    </p>
+    <button class="weekly-plan-owner-toggle" type="button" data-weekly-plan-owner-toggle aria-controls="weekly-plan-owner-panel" aria-expanded="false">
+      <i class="fas fa-lock" aria-hidden="true"></i>
+      Owner mode
+    </button>
+  </div>
+
+  <section id="weekly-plan-owner-panel" class="weekly-plan-owner" data-weekly-plan-owner hidden aria-labelledby="weekly-plan-owner-title">
+    <div class="weekly-plan-owner__heading">
+      <div>
+        <p class="weekly-plan-board__kicker">Private editor</p>
+        <h2 id="weekly-plan-owner-title">Owner mode</h2>
+      </div>
+      <button class="weekly-plan-owner__close" type="button" data-weekly-plan-owner-close aria-label="Close owner mode">
+        <i class="fas fa-times" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <div data-weekly-plan-owner-login>
+      <p class="weekly-plan-owner__copy">
+        Use a fine-grained GitHub token limited to this repository with
+        <strong>Contents: Read and write</strong>. The token stays in memory only and is sent directly to GitHub.
+      </p>
+      <div class="weekly-plan-owner__login-row">
+        <label class="screen-reader-text" for="weekly-plan-token">Fine-grained GitHub token</label>
+        <input id="weekly-plan-token" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…" data-weekly-plan-token>
+        <button type="button" data-weekly-plan-connect>Connect</button>
+      </div>
+      <p class="weekly-plan-owner__links">
+        <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">Create a fine-grained token</a>
+        <span aria-hidden="true">·</span>
+        <a href="https://github.com/{{ site.weekly_plan.github_owner }}/{{ site.weekly_plan.github_repo }}/edit/{{ site.weekly_plan.github_branch }}/{{ site.weekly_plan.github_data_path }}" target="_blank" rel="noopener noreferrer">Edit the data file on GitHub</a>
+      </p>
+    </div>
+
+    <div class="weekly-plan-owner__actions" data-weekly-plan-owner-actions hidden>
+      <p class="weekly-plan-owner__identity">
+        <i class="fas fa-user-check" aria-hidden="true"></i>
+        Connected as <strong data-weekly-plan-owner-name></strong>
+      </p>
+      <div class="weekly-plan-owner__buttons">
+        <button type="button" class="weekly-plan-owner__import" data-weekly-plan-import hidden>Import browser draft</button>
+        <button type="button" class="weekly-plan-owner__disconnect" data-weekly-plan-disconnect>Disconnect</button>
+        <button type="button" class="weekly-plan-owner__save" data-weekly-plan-save disabled>
+          <i class="fab fa-github" aria-hidden="true"></i>
+          Save to GitHub
+        </button>
+      </div>
+    </div>
+
+    <p class="weekly-plan-owner__status" data-weekly-plan-owner-status aria-live="polite"></p>
+  </section>
 </div>

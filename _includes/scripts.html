@@ -1,4 +1,11 @@
 <script src="{{ "/assets/js/main.min.js" | relative_url }}"></script>
+<script
+  id="weekly-plan-source"
+  type="application/json"
+  data-github-owner="{{ site.weekly_plan.github_owner | escape }}"
+  data-github-repo="{{ site.weekly_plan.github_repo | escape }}"
+  data-github-branch="{{ site.weekly_plan.github_branch | escape }}"
+  data-github-path="{{ site.weekly_plan.github_data_path | escape }}">{{ site.data.weekly_plans | jsonify | replace: '</', '<\/' }}</script>
 <script src="{{ "/assets/js/weekly-plan.js" | relative_url }}"></script>
 <script>
   $(document).ready(function () {

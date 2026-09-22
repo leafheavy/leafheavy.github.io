@@ -11,6 +11,15 @@ description              : "Zhong Ye's Homepage"
 repository               : "leafheavy/leafheavy.github.io"
 google_scholar_stats_use_cdn : true
 
+# Weekly Plan publishing
+# Public pages read from _data/weekly_plans.json. Owner mode writes that file
+# through GitHub's Contents API after an explicit, in-memory-only login.
+weekly_plan:
+  github_owner: "leafheavy"
+  github_repo: "leafheavy.github.io"
+  github_branch: "main"
+  github_data_path: "_data/weekly_plans.json"
+
 # google analytics
 google_analytics_id      :  # get google_analytics_id from https://analytics.google.com/analytics/
 

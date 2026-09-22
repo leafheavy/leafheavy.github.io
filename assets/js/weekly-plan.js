@@ -1,17 +1,26 @@
 (function () {
   'use strict';
 
-  var STORAGE_KEY = 'leafheavy.weeklyPlan.v1';
+  var LEGACY_STORAGE_KEY = 'leafheavy.weeklyPlan.v1';
+  var SOURCE_ELEMENT_ID = 'weekly-plan-source';
   var SITE_TIME_ZONE = 'Asia/Shanghai';
+  var START_DATE_KEY = '2026-09-20';
   var START_DATE = createDate(2026, 8, 20);
   var WEEK_MS = 7 * 24 * 60 * 60 * 1000;
   var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  var storageEnabled = true;
-  var memoryState = null;
+
+  var githubConfig = null;
+  var publishedState = emptyState();
+  var activeState = emptyState();
+  var legacyState = emptyState();
+  var editorMode = false;
+  var stateDirty = false;
+  var legacyImported = false;
+  var githubToken = '';
+  var githubFileSha = '';
 
   function createDate(year, month, day) {
-    var date = new Date(year, month, day, 12, 0, 0, 0);
-    return date;
+    return new Date(year, month, day, 12, 0, 0, 0);
   }
 
   function cloneDate(date) {
@@ -61,12 +70,6 @@
     return [date.getFullYear(), pad(date.getMonth() + 1), pad(date.getDate())].join('-');
   }
 
-  function dateFromKey(key) {
-    var parts = String(key || '').split('-').map(Number);
-    if (parts.length !== 3 || !parts[0] || !parts[1] || !parts[2]) return cloneDate(START_DATE);
-    return createDate(parts[0], parts[1] - 1, parts[2]);
-  }
-
   function fullDate(date) {
     return [date.getFullYear(), pad(date.getMonth() + 1), pad(date.getDate())].join('.');
   }
@@ -104,7 +107,7 @@
   }
 
   function emptyState() {
-    return { version: 1, weeks: {} };
+    return { version: 1, startDate: START_DATE_KEY, weeks: {} };
   }
 
   function normalizePlans(plans) {
@@ -131,49 +134,92 @@
       return state;
     }
 
-    Object.keys(value.weeks).forEach(function (key) {
-      if (/^\d{4}-\d{2}-\d{2}$/.test(key)) {
+    Object.keys(value.weeks).sort().forEach(function (key) {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(key) && key >= START_DATE_KEY) {
         state.weeks[key] = normalizePlans(value.weeks[key]);
       }
     });
     return state;
   }
 
-  function readState() {
-    var raw = memoryState;
+  function serializeState(state) {
+    return JSON.stringify(normalizeState(state), null, 2) + '\n';
+  }
 
-    if (storageEnabled) {
-      try {
-        raw = window.localStorage.getItem(STORAGE_KEY);
-      } catch (error) {
-        storageEnabled = false;
-      }
-    }
-
-    if (!raw) return emptyState();
+  function readPublishedState() {
+    var source = document.getElementById(SOURCE_ELEMENT_ID);
+    if (!source) return emptyState();
 
     try {
-      return normalizeState(JSON.parse(raw));
+      return normalizeState(JSON.parse(source.textContent || '{}'));
     } catch (error) {
       return emptyState();
     }
   }
 
-  function writeState(state) {
-    var serialized = JSON.stringify(normalizeState(state));
-    memoryState = serialized;
+  function readGithubConfig() {
+    var source = document.getElementById(SOURCE_ELEMENT_ID);
+    return {
+      owner: source ? source.getAttribute('data-github-owner') || '' : '',
+      repo: source ? source.getAttribute('data-github-repo') || '' : '',
+      branch: source ? source.getAttribute('data-github-branch') || 'main' : 'main',
+      path: source ? source.getAttribute('data-github-path') || '_data/weekly_plans.json' : '_data/weekly_plans.json'
+    };
+  }
 
-    if (storageEnabled) {
-      try {
-        window.localStorage.setItem(STORAGE_KEY, serialized);
-      } catch (error) {
-        storageEnabled = false;
-      }
+  function readLegacyState() {
+    try {
+      var raw = window.localStorage.getItem(LEGACY_STORAGE_KEY);
+      return raw ? normalizeState(JSON.parse(raw)) : emptyState();
+    } catch (error) {
+      return emptyState();
     }
+  }
+
+  function clearLegacyState() {
+    try {
+      window.localStorage.removeItem(LEGACY_STORAGE_KEY);
+    } catch (error) {
+      // A blocked storage API does not affect the GitHub-backed editor.
+    }
+  }
+
+  function readState() {
+    return normalizeState(activeState);
+  }
+
+  function writeDraft(state) {
+    if (!editorMode) return false;
+    activeState = normalizeState(state);
+    stateDirty = true;
+    return true;
   }
 
   function getPlans(state, key) {
     return normalizePlans(state.weeks[key]);
+  }
+
+  function countPlans(state) {
+    return Object.keys(state.weeks || {}).reduce(function (total, key) {
+      return total + getPlans(state, key).length;
+    }, 0);
+  }
+
+  function mergeStates(baseState, importedState) {
+    var merged = normalizeState(baseState);
+    var incoming = normalizeState(importedState);
+
+    Object.keys(incoming.weeks).forEach(function (key) {
+      var existing = getPlans(merged, key);
+      incoming.weeks[key].forEach(function (plan) {
+        var duplicate = existing.some(function (candidate) {
+          return candidate.id === plan.id || candidate.text === plan.text;
+        });
+        if (!duplicate) existing.push(plan);
+      });
+      merged.weeks[key] = existing;
+    });
+    return merged;
   }
 
   function calculateProgress(plans) {
@@ -197,14 +243,13 @@
       'aria-valuetext',
       progress.total
         ? progress.completed + ' of ' + progress.total + ' plans completed'
-        : 'No plans added'
+        : 'No plans published'
     );
   }
 
   function renderSidebarProgress() {
     var currentStart = getCurrentWeekStart();
-    var currentKey = dateKey(currentStart);
-    var plans = getPlans(readState(), currentKey);
+    var plans = getPlans(readState(), dateKey(currentStart));
     var progress = calculateProgress(plans);
 
     Array.prototype.forEach.call(document.querySelectorAll('[data-weekly-progress-card]'), function (card) {
@@ -219,7 +264,7 @@
       if (range) range.textContent = compactRange(currentStart);
       if (count) {
         if (!progress.total) {
-          count.textContent = 'Add this week\'s plans';
+          count.textContent = 'No plans published';
         } else if (progress.completed === progress.total) {
           count.textContent = 'All ' + progress.total + ' completed';
         } else {
@@ -230,13 +275,16 @@
     });
   }
 
-  function createPlanItem(plan, editable, selectedKey, rerender) {
+  function createPlanItem(plan, editable, selectedKey, onDraftChange) {
     var item = document.createElement('li');
+    var control = document.createElement('label');
     var checkbox = document.createElement('input');
+    var visual = document.createElement('span');
     var text = document.createElement('span');
 
     item.className = 'weekly-plan-item' + (plan.completed ? ' is-complete' : '');
-    checkbox.className = 'weekly-plan-item__check';
+    control.className = 'weekly-plan-item__control' + (editable ? '' : ' is-readonly');
+    checkbox.className = 'weekly-plan-item__native-check';
     checkbox.type = 'checkbox';
     checkbox.checked = plan.completed;
     checkbox.disabled = !editable;
@@ -244,23 +292,28 @@
       'aria-label',
       (plan.completed ? 'Mark incomplete: ' : 'Mark complete: ') + plan.text
     );
+    visual.className = 'weekly-plan-item__check';
+    visual.setAttribute('aria-hidden', 'true');
 
     checkbox.addEventListener('change', function () {
+      if (!editable || !editorMode) return;
       var state = readState();
       var plans = getPlans(state, selectedKey);
       plans.forEach(function (candidate) {
         if (candidate.id === plan.id) candidate.completed = checkbox.checked;
       });
       state.weeks[selectedKey] = plans;
-      writeState(state);
+      writeDraft(state);
       notifyChange();
-      rerender();
+      onDraftChange();
     });
 
+    control.appendChild(checkbox);
+    control.appendChild(visual);
     text.className = 'weekly-plan-item__text';
     text.textContent = plan.text;
 
-    item.appendChild(checkbox);
+    item.appendChild(control);
     item.appendChild(text);
 
     if (editable) {
@@ -275,9 +328,9 @@
         state.weeks[selectedKey] = getPlans(state, selectedKey).filter(function (candidate) {
           return candidate.id !== plan.id;
         });
-        writeState(state);
+        writeDraft(state);
         notifyChange();
-        rerender();
+        onDraftChange();
       });
       item.appendChild(remove);
     } else {
@@ -289,11 +342,76 @@
     return item;
   }
 
+  function githubContentEndpoint() {
+    var encodedPath = githubConfig.path.split('/').map(encodeURIComponent).join('/');
+    return '/repos/' + encodeURIComponent(githubConfig.owner) + '/' +
+      encodeURIComponent(githubConfig.repo) + '/contents/' + encodedPath;
+  }
+
+  function githubRequest(path, token, options) {
+    var request = options || {};
+    var headers = {
+      Accept: 'application/vnd.github+json',
+      Authorization: 'Bearer ' + token,
+      'X-GitHub-Api-Version': '2022-11-28'
+    };
+    if (request.body) headers['Content-Type'] = 'application/json';
+
+    return window.fetch('https://api.github.com' + path, {
+      method: request.method || 'GET',
+      headers: headers,
+      body: request.body || undefined
+    }).then(function (response) {
+      return response.json().catch(function () { return {}; }).then(function (data) {
+        if (!response.ok) {
+          var message = data && data.message ? data.message : 'GitHub request failed';
+          throw new Error(message + ' (' + response.status + ')');
+        }
+        return data;
+      });
+    });
+  }
+
+  function decodeBase64Utf8(value) {
+    var binary = window.atob(String(value || '').replace(/\s/g, ''));
+    var bytes = new Uint8Array(binary.length);
+    for (var index = 0; index < binary.length; index += 1) {
+      bytes[index] = binary.charCodeAt(index);
+    }
+    if (window.TextDecoder) return new window.TextDecoder('utf-8').decode(bytes);
+
+    var escaped = '';
+    bytes.forEach(function (byte) {
+      escaped += '%' + byte.toString(16).padStart(2, '0');
+    });
+    return decodeURIComponent(escaped);
+  }
+
+  function encodeBase64Utf8(value) {
+    var bytes;
+    if (window.TextEncoder) {
+      bytes = new window.TextEncoder().encode(value);
+    } else {
+      var encoded = unescape(encodeURIComponent(value));
+      bytes = new Uint8Array(encoded.length);
+      for (var legacyIndex = 0; legacyIndex < encoded.length; legacyIndex += 1) {
+        bytes[legacyIndex] = encoded.charCodeAt(legacyIndex);
+      }
+    }
+
+    var binary = '';
+    for (var index = 0; index < bytes.length; index += 1) {
+      binary += String.fromCharCode(bytes[index]);
+    }
+    return window.btoa(binary);
+  }
+
   function initializePlanPage() {
     var root = document.querySelector('[data-weekly-plan-app]');
     if (!root) return null;
 
     var selectedStart = getCurrentWeekStart();
+    var saving = false;
     var elements = {
       range: root.querySelector('[data-weekly-plan-range]'),
       percent: root.querySelector('[data-weekly-plan-percent]'),
@@ -311,8 +429,25 @@
       input: root.querySelector('[data-weekly-plan-input]'),
       notice: root.querySelector('[data-weekly-plan-notice]'),
       empty: root.querySelector('[data-weekly-plan-empty]'),
-      list: root.querySelector('[data-weekly-plan-list]')
+      list: root.querySelector('[data-weekly-plan-list]'),
+      ownerToggle: root.querySelector('[data-weekly-plan-owner-toggle]'),
+      ownerPanel: root.querySelector('[data-weekly-plan-owner]'),
+      ownerClose: root.querySelector('[data-weekly-plan-owner-close]'),
+      ownerLogin: root.querySelector('[data-weekly-plan-owner-login]'),
+      token: root.querySelector('[data-weekly-plan-token]'),
+      connect: root.querySelector('[data-weekly-plan-connect]'),
+      ownerActions: root.querySelector('[data-weekly-plan-owner-actions]'),
+      ownerName: root.querySelector('[data-weekly-plan-owner-name]'),
+      importLegacy: root.querySelector('[data-weekly-plan-import]'),
+      disconnect: root.querySelector('[data-weekly-plan-disconnect]'),
+      save: root.querySelector('[data-weekly-plan-save]'),
+      ownerStatus: root.querySelector('[data-weekly-plan-owner-status]')
     };
+
+    function setOwnerStatus(message, state) {
+      elements.ownerStatus.textContent = message || '';
+      elements.ownerStatus.setAttribute('data-state', state || 'neutral');
+    }
 
     function render() {
       var currentStart = getCurrentWeekStart();
@@ -321,6 +456,7 @@
 
       var selectedKey = dateKey(selectedStart);
       var isCurrent = selectedKey === dateKey(currentStart);
+      var editable = isCurrent && editorMode;
       var plans = getPlans(readState(), selectedKey);
       var progress = calculateProgress(plans);
       var isComplete = progress.total > 0 && progress.completed === progress.total;
@@ -328,12 +464,13 @@
       elements.range.textContent = fullRange(selectedStart);
       elements.percent.textContent = progress.rounded + '%';
       elements.summary.textContent = !progress.total
-        ? (isCurrent ? 'Ready for your plans' : 'No plans recorded')
+        ? (isCurrent ? 'Waiting for this week\'s plans' : 'No plans recorded')
         : (isComplete
           ? 'All ' + progress.total + ' completed'
           : progress.completed + ' of ' + progress.total + ' completed');
       updateProgressBar(elements.progress, elements.progressFill, progress);
       root.classList.toggle('is-complete', isComplete);
+      root.classList.toggle('is-owner-mode', editorMode);
 
       elements.weekNumber.textContent = 'Week ' + weekNumber(selectedStart);
       elements.switcherRange.textContent = friendlyRange(selectedStart);
@@ -345,26 +482,50 @@
 
       elements.previous.disabled = selectedStart <= START_DATE;
       elements.next.disabled = selectedStart >= currentStart;
-      elements.form.hidden = !isCurrent;
-      elements.notice.hidden = isCurrent;
-      if (!isCurrent) {
-        elements.notice.textContent = 'Past weeks are kept as a read-only record.';
+      elements.form.hidden = !editable;
+      elements.notice.hidden = editable;
+      if (!editable) {
+        elements.notice.textContent = !isCurrent
+          ? 'Past weeks are kept as a read-only record.'
+          : 'Published plans are read-only. Owner mode is required to make changes.';
       }
 
       elements.empty.hidden = progress.total > 0;
       if (!progress.total) {
         var emptyTitle = elements.empty.querySelector('h3');
         var emptyCopy = elements.empty.querySelector('p');
-        emptyTitle.textContent = isCurrent ? 'This week is ready for you.' : 'No plans were recorded.';
-        emptyCopy.textContent = isCurrent
-          ? 'Add the first plan above. Every completed item contributes an equal share of the progress.'
-          : 'This week remains empty in your archive.';
+        if (editable) {
+          emptyTitle.textContent = 'This week is ready for you.';
+          emptyCopy.textContent = 'Add the first plan above. Every completed item contributes an equal share of the progress.';
+        } else if (isCurrent) {
+          emptyTitle.textContent = 'No plans published yet.';
+          emptyCopy.textContent = 'The owner has not published plans for this week.';
+        } else {
+          emptyTitle.textContent = 'No plans were recorded.';
+          emptyCopy.textContent = 'This week remains empty in the archive.';
+        }
       }
 
       elements.list.innerHTML = '';
       plans.forEach(function (plan) {
-        elements.list.appendChild(createPlanItem(plan, isCurrent, selectedKey, render));
+        elements.list.appendChild(createPlanItem(plan, editable, selectedKey, markDraftChanged));
       });
+
+      elements.ownerLogin.hidden = editorMode;
+      elements.ownerActions.hidden = !editorMode;
+      elements.save.disabled = !editorMode || !stateDirty || saving;
+      elements.save.classList.toggle('is-saving', saving);
+      elements.importLegacy.hidden = !editorMode || legacyImported || countPlans(legacyState) === 0;
+      if (!elements.importLegacy.hidden) {
+        elements.importLegacy.textContent = 'Import browser draft (' + countPlans(legacyState) + ')';
+      }
+      elements.ownerToggle.classList.toggle('is-active', editorMode);
+      elements.ownerToggle.setAttribute('aria-expanded', String(!elements.ownerPanel.hidden));
+    }
+
+    function markDraftChanged() {
+      setOwnerStatus('Unsaved changes. Save them to GitHub when ready.', 'pending');
+      render();
     }
 
     elements.previous.addEventListener('click', function () {
@@ -382,6 +543,7 @@
 
     elements.form.addEventListener('submit', function (event) {
       event.preventDefault();
+      if (!editorMode) return;
       var value = elements.input.value.trim();
       if (!value) {
         elements.input.focus();
@@ -398,11 +560,144 @@
         createdAt: new Date().toISOString()
       });
       state.weeks[key] = plans;
-      writeState(state);
+      writeDraft(state);
       elements.input.value = '';
       notifyChange();
-      render();
+      markDraftChanged();
       elements.input.focus();
+    });
+
+    elements.ownerToggle.addEventListener('click', function () {
+      elements.ownerPanel.hidden = false;
+      render();
+      if (!editorMode) elements.token.focus();
+    });
+
+    elements.ownerClose.addEventListener('click', function () {
+      elements.ownerPanel.hidden = true;
+      render();
+      elements.ownerToggle.focus();
+    });
+
+    elements.connect.addEventListener('click', function () {
+      var token = elements.token.value.trim();
+      if (!token) {
+        setOwnerStatus('Enter a fine-grained GitHub token first.', 'error');
+        elements.token.focus();
+        return;
+      }
+      if (!window.fetch || !githubConfig.owner || !githubConfig.repo || !githubConfig.path) {
+        setOwnerStatus('Owner mode is not configured for this site.', 'error');
+        return;
+      }
+
+      elements.connect.disabled = true;
+      setOwnerStatus('Verifying with GitHub…', 'working');
+
+      githubRequest('/user', token)
+        .then(function (user) {
+          if (!user.login || user.login.toLowerCase() !== githubConfig.owner.toLowerCase()) {
+            throw new Error('This token does not belong to ' + githubConfig.owner + '.');
+          }
+          return githubRequest(
+            githubContentEndpoint() + '?ref=' + encodeURIComponent(githubConfig.branch),
+            token
+          ).then(function (file) {
+            return { user: user, file: file };
+          });
+        })
+        .then(function (result) {
+          var repositoryState = normalizeState(JSON.parse(decodeBase64Utf8(result.file.content)));
+          githubToken = token;
+          githubFileSha = result.file.sha;
+          publishedState = repositoryState;
+          activeState = normalizeState(repositoryState);
+          editorMode = true;
+          stateDirty = false;
+          legacyImported = false;
+          elements.token.value = '';
+          elements.ownerName.textContent = result.user.login;
+          setOwnerStatus('Connected. Current-week controls are now unlocked.', 'success');
+          notifyChange();
+          render();
+        })
+        .catch(function (error) {
+          githubToken = '';
+          githubFileSha = '';
+          editorMode = false;
+          setOwnerStatus(error.message || 'Could not connect to GitHub.', 'error');
+          render();
+        })
+        .then(function () {
+          elements.connect.disabled = false;
+        });
+    });
+
+    elements.token.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        elements.connect.click();
+      }
+    });
+
+    elements.importLegacy.addEventListener('click', function () {
+      if (!editorMode || !countPlans(legacyState)) return;
+      activeState = mergeStates(activeState, legacyState);
+      legacyImported = true;
+      stateDirty = true;
+      setOwnerStatus('Browser draft imported. Review it, then save to GitHub.', 'pending');
+      notifyChange();
+      render();
+    });
+
+    elements.disconnect.addEventListener('click', function () {
+      if (stateDirty) {
+        setOwnerStatus('Save your changes before disconnecting, or reload the page to discard them.', 'error');
+        return;
+      }
+      githubToken = '';
+      githubFileSha = '';
+      editorMode = false;
+      activeState = normalizeState(publishedState);
+      elements.ownerName.textContent = '';
+      setOwnerStatus('Disconnected. The page is read-only again.', 'neutral');
+      notifyChange();
+      render();
+    });
+
+    elements.save.addEventListener('click', function () {
+      if (!editorMode || !stateDirty || saving || !githubToken || !githubFileSha) return;
+      saving = true;
+      setOwnerStatus('Saving to GitHub…', 'working');
+      render();
+
+      var payload = {
+        message: 'Update weekly plan (' + dateKey(getCurrentWeekStart()) + ')',
+        content: encodeBase64Utf8(serializeState(activeState)),
+        sha: githubFileSha,
+        branch: githubConfig.branch
+      };
+
+      githubRequest(githubContentEndpoint(), githubToken, {
+        method: 'PUT',
+        body: JSON.stringify(payload)
+      }).then(function (result) {
+        githubFileSha = result.content && result.content.sha ? result.content.sha : githubFileSha;
+        publishedState = normalizeState(activeState);
+        stateDirty = false;
+        if (legacyImported) {
+          clearLegacyState();
+          legacyState = emptyState();
+          legacyImported = false;
+        }
+        setOwnerStatus('Saved to GitHub. The public page will update after Pages finishes deploying.', 'success');
+        notifyChange();
+      }).catch(function (error) {
+        setOwnerStatus((error.message || 'Could not save to GitHub.') + ' Reconnect if the file changed elsewhere.', 'error');
+      }).then(function () {
+        saving = false;
+        render();
+      });
     });
 
     render();
@@ -421,19 +716,15 @@
   }
 
   function initialize() {
+    githubConfig = readGithubConfig();
+    publishedState = readPublishedState();
+    activeState = normalizeState(publishedState);
+    legacyState = readLegacyState();
+
     var renderPlanPage = initializePlanPage();
     renderSidebarProgress();
 
-    document.addEventListener('weeklyplan:change', function () {
-      renderSidebarProgress();
-    });
-
-    window.addEventListener('storage', function (event) {
-      if (event.key !== STORAGE_KEY) return;
-      renderSidebarProgress();
-      if (renderPlanPage) renderPlanPage();
-    });
-
+    document.addEventListener('weeklyplan:change', renderSidebarProgress);
     window.addEventListener('focus', function () {
       renderSidebarProgress();
       if (renderPlanPage) renderPlanPage();

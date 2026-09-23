@@ -2,6 +2,13 @@
   "version": 1,
   "startDate": "2026-09-20",
   "weeks": {
-    "2026-09-20": []
+    "2026-09-20": [
+      {
+        "id": "plan-mudjtzxj-4udwj20",
+        "text": "完成2026数学建模",
+        "completed": false,
+        "createdAt": "2026-09-23T03:34:12.775Z"
+      }
+    ]
   }
 }

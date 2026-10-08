@@ -329,3 +329,36 @@ $n$ 个对象具有 $n!$ 种排列方式；当对象没有区别的时候，这 
 由于一般形式的五次方程的根没有任何 prior，因此构成的群是五次置换群。由于五次置换群并不是可解群，自然得证。
 
 <img src="/images/blogs/GroupTheory/对称与破坏对称.png" alt="可解群定义" style="zoom: 60%;" />
+
+
+
+## 矩阵群
+
+<img src="/images/blogs/GroupTheory/复向量内积.png" alt="复向量" style="zoom: 60%;" />
+
+<img src="/images/blogs/GroupTheory/厄米矩阵.png" alt="厄米矩阵" style="zoom: 60%;" />
+
+<img src="/images/blogs/GroupTheory/幺正矩阵的厄米共轭.png" alt="厄米矩阵" style="zoom: 60%;" />
+
+<img src="/images/blogs/GroupTheory/矩阵乘法群.png" alt="矩阵乘法群" style="zoom: 60%;" />
+
+将矩阵群和一个普通的群联系起来：也就是在二者之间建立一个同态。此时，将矩阵群称为群的一个**表示**。矩阵的阶数被称为表示的维数。
+
+若建立的是同构，此时被称为**真实/忠实表示**。
+
+群有一个最简单的表示——正则表示，其和群是同构的。
+$$
+D_{ij}(g)=
+\begin{cases}
+1 \quad x_i=g\cdot x_j
+\\
+0 \quad x_i\neq g\cdot x_j
+\end{cases}
+$$
+理解：如果第 $i$ 个元素 $x_i$ 等于元素 $g$ 乘以第 $j$ 个元素 $x_j$，即 $x_i = g \cdot x_j$，那么矩阵第 $i$ 行第 $j$ 列的值就是 $1$，否则是 $0$。这里的元素顺序和乘法表中的顺序保持一致。
+
+如下示例所示。其中，$g=a$。聚焦第一列，即 $j=1$。此时有：$g\cdot  x_j = a\cdot x_1 = a\cdot e = a = x_{i=4}$。因此 $(D(a))_{41}=1$.
+
+<img src="/images/blogs/GroupTheory/群的正则表示.png" alt="群的正则表示" style="zoom: 60%;" />
+
+> 注意：上图右上角正则表示的定义过度简化了

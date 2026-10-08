@@ -330,8 +330,6 @@ $n$ 个对象具有 $n!$ 种排列方式；当对象没有区别的时候，这 
 
 <img src="/images/blogs/GroupTheory/对称与破坏对称.png" alt="可解群定义" style="zoom: 60%;" />
 
-
-
 ## 矩阵群
 
 <img src="/images/blogs/GroupTheory/复向量内积.png" alt="复向量" style="zoom: 60%;" />
@@ -341,6 +339,8 @@ $n$ 个对象具有 $n!$ 种排列方式；当对象没有区别的时候，这 
 <img src="/images/blogs/GroupTheory/幺正矩阵的厄米共轭.png" alt="厄米矩阵" style="zoom: 60%;" />
 
 <img src="/images/blogs/GroupTheory/矩阵乘法群.png" alt="矩阵乘法群" style="zoom: 60%;" />
+
+### 群的表示
 
 将矩阵群和一个普通的群联系起来：也就是在二者之间建立一个同态。此时，将矩阵群称为群的一个**表示**。矩阵的阶数被称为表示的维数。
 

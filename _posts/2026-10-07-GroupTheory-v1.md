@@ -246,7 +246,7 @@ $$
 >
 > 综上，既单又满，所以 $\phi$ 是同构映射，即 $G/N \cong H$。
 
-![同态映射](/images/blogs/GroupTheory/同态基本定理四步证明的目的.png)
+<img src="/images/blogs/GroupTheory/同态基本定理四步证明的目的.png" alt="同态映射" style="zoom:60%;" />
 
 ### 置换
 
@@ -281,4 +281,51 @@ $n$ 个对象具有 $n!$ 种排列方式；当对象没有区别的时候，这 
 >
 > 因此 $n$ 次置换群包含了 $n$ 阶群的所有元素。
 
-![置换的地位](/images/blogs/GroupTheory/置换的地位.png)
+<img src="/images/blogs/GroupTheory/置换的地位.png" alt="置换的地位" style="zoom:30%;" />
+
+## 五次方程的可解性
+
+一般形式的五次（及以上）方程没有根式解
+
+- 一般形式：最低次到最高次每一项都存在；系数为整数/有理数；
+
+> 这里的一般形式，课程讲解似乎不够严谨。待考察...
+
+- 根式解：用整数、单位根，经过有限次地加减乘除以及开方运算可得
+  - $n$ 次单位根：满足 $z^n=\underbrace{r\cos \theta+i\cdot \sin \theta = re^{i\theta}}_{欧拉公式}=1$ 的解
+
+<img src="/images/blogs/GroupTheory/单位根.png" alt="单位根" style="zoom: 30%;" />
+
+若 $x$ 为根式，则总能够写出其所对应的方程。其对应方程一定还存在其他根，且总数量不超过 $x$ 的根式次数之积。
+
+> 有限次扩域必是代数扩域。
+
+### 方程的对称操作
+
+把根式 $x$ 替换为另外的根，而不改变原方程的操作，认为是保持方程不变的对称操作。
+
+<img src="/images/blogs/GroupTheory/方程的对称操作个数.png" alt="方程的对称操作" style="zoom: 60%;" />
+
+如上示例所示，该方程的对称操作有：$2\times 3\times 5$ 种；这里触发对称操作增加的 trigger 是 "根号" 的出现。
+
+又因为 $n$ 次根式（对应着 $n$ 阶循环群）总能被分解为几个素数次根式的叠加，也就是 "一个根号分解为多个根号"；
+
+因此一个根号带来的对称性能够分解为多个素数循环群的叠加。换句话说，$\color{red}{保持方程不变的操作对应增加素数循环群}$。
+
+### 扩域缩群
+
+<img src="/images/blogs/GroupTheory/扩域缩群.png" alt="扩域缩群" style="zoom: 50%;" />
+
+### 可解群
+
+<img src="/images/blogs/GroupTheory/可解群定义.png" alt="可解群定义" style="zoom: 50%;" />
+
+由上可得：保持方程不变的操作对应增加素数循环群。也意味着：保持方程不变的操作$\color{red}{构成了可解群}$。
+
+### 五次方程可解性简要证明
+
+<img src="/images/blogs/GroupTheory/不可解.png" alt="不可解" style="zoom: 60%;" />
+
+由于一般形式的五次方程的根没有任何 prior，因此构成的群是五次置换群。由于五次置换群并不是可解群，自然得证。
+
+<img src="/images/blogs/GroupTheory/对称与破坏对称.png" alt="可解群定义" style="zoom: 60%;" />

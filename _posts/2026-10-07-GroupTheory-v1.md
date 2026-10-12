@@ -133,13 +133,13 @@ $g_1^{-1}g_2 \in H \iff g_1H = g_2H$
 
 #### 拉格朗日定理
 
-若 $H\subseteq G$，则 $|G|=k|H|$. 其中 $k$ 为 $H$ 的不同旁集的个数，必为正整数。
+若 $H\subseteq G$，则 $\lvert G\rvert=k\lvert H\rvert$. 其中 $k$ 为 $H$ 的不同旁集的个数，必为正整数。
 
 > ***Proof.***
 >
 > 群 $G$ 中所有旁集并在一起必然包含 $G$，因此断言：群中的元素一定属于某个旁集.
 >
-> 由于集合 $H$ 和元素 $x$ 的乘法 (即：旁集 $xH$) 不改变 $H$ 的元素个数，因此断言：$|H|=|xH|$.
+> 由于集合 $H$ 和元素 $x$ 的乘法 (即：旁集 $xH$) 不改变 $H$ 的元素个数，因此断言：$\lvert H\rvert=\lvertx H\rvert$.
 >
 > 再结合 "两个不同的旁集必然不相交" 有：
 >
@@ -431,7 +431,9 @@ $$
 
 如果存在一个与 $R$ 无关的可逆矩阵 $P$，使得：
 $$
+\begin{equation}
 D^{(i)}(R)P=PD^{(j)}(R), \quad\forall R\in G
+\end{equation}
 $$
 那么它们是等价表示。
 
@@ -445,15 +447,19 @@ $$
 
 假设 $D^{(i)}$、$D^{(j)}$ 是有限群 $G$ 在复数域上的两个$\color{red}{不可约}$表示，且：
 $$
+\begin{equation}
 D^{(i)}(R)Y=YD^{(j)}(R), \quad \forall R\in G
+\end{equation}
 $$
 那么：
 $$
+\begin{equation}
 \operatorname{Hom}_G(V_j,V_i)=
 \begin{cases}
 \{0\},&i\ne j\\
 \mathbb C I,&i=j
 \end{cases}
+\end{equation}
 $$
 这里默认 $i,j$ 标记两种不等价的不可约表示；$\operatorname{Hom}_G$ 表示所有满足交织关系的线性映射构成的空间。
 
@@ -469,12 +475,12 @@ $$
 >
 > 利用交织关系：
 > $$
-> \begin{aligned}
+> \begin{align}
 > Y D^{(j)}(R)v
 > &=D^{(i)}(R)Yv\\
 > &=D^{(i)}(R)0\\
 > &=0
-> \end{aligned}
+> \end{align}
 > $$
 > 因此 $D^{(j)}(R) v\in \ker(Y)$，意味着 $\ker(Y)$ 是 $D^{(j)}$ 的不变子空间。但是 $D^{(j)}$ 不可约，因此其不变子空间只可能是 $\{0\}$ 或者 $V_j$。即：$\textcolor{red}{\ker(Y)=\{0\}\text{或者}\ker(Y)=V_j}$. 
 >
@@ -486,14 +492,14 @@ $$
 >
 > 对任意 $w=Yv$，有：
 > $$
-> \begin{aligned}
+> \begin{align}
 > D^{(i)}(R)w
 > &=D^{(i)}(R)Yv\\
 > &=YD^{(j)}(R)v\\
 > &\in\operatorname{Im}(Y)
-> \end{aligned}
+> \end{align}
 > $$
-> 因此：$\operatorname{Im}(Y)$ 是 $D^{(i)}$的不变子空间。由于 $D^{(i)}$ 也不可约，所以其不变子空间 $\operatorname{Im}(Y) = \{0\} \or V_j$。鉴于假设 $Y\ne0$，所以：$\operatorname{Im}(Y)=V_i$，即 $Y$ 是满射。
+> 因此：$\operatorname{Im}(Y)$ 是 $D^{(i)}$的不变子空间。由于 $D^{(i)}$ 也不可约，所以其不变子空间 $\operatorname{Im}(Y) = \{0\} \cup V_j$。鉴于假设 $Y\ne0$，所以：$\operatorname{Im}(Y)=V_i$，即 $Y$ 是满射。
 >
 > 综上，$Y$ 单射且是满射，所以 $Y$ 可逆。此时， $D^{(i)}$ 与 $D^{(j)}$ 的交织关系变成了$\textcolor{red}{等价}$。
 >
@@ -501,6 +507,7 @@ $$
 >
 > 总证明逻辑链为：
 > $$
+> \begin{equation}
 > Y\ne0
 > \implies
 > Y\text{ 既单射又满射}
@@ -508,22 +515,27 @@ $$
 > \implies D^{(i)}, D^{(j)}\text{ 等价}
 > \implies \textcolor{red}{发生矛盾}
 > \implies Y=0
+> \end{equation}
 > $$
 > ***推论 Proof.***
 > $$
+> \begin{equation}
 > 两个不可约表示维数不同
 > \implies
 > Y\text{ 非方阵}
 > \implies Y\text{ 不可逆}
+> \end{equation}
 > $$
 > 又因为有：$Y\ne0\implies Y\text{ 既单射又满射}\implies Y\text{ 可逆}$，利用蕴含的传递性以及逆反命题为真可得：
 > $$
+> \begin{equation}
 > 两个不可约表示维数不同
 > \implies
 > Y\text{ 非方阵}
 > \implies Y\text{ 不可逆}
 > \implies
 > Y=0
+> \end{equation}
 > $$
 >
 > **Step 2.** 
@@ -536,23 +548,23 @@ $$
 >
 > 现在构造矩阵 $X=Y-\lambda I$。所以有：
 > $$
-> \begin{aligned}
+> \begin{align}
 > X v
 > &=(Y-\lambda I)v\\
 > &=Yv - \lambda v\\
 > &=0\\
-> \end{aligned}
+> \end{align}
 > $$
 > 这意味着，$v\in \ker(X)$。因为 $v\neq 0$，所以意味着 $X$ 的核空间不止有零： $\ker(X)\neq \{0\}$。
 >
 > 同样利用交织关系：
 > $$
-> \begin{aligned}
+> \begin{align}
 > X D(R)v
 > &=D(R)Xv\\
 > &=D(R)0\\
 > &=0
-> \end{aligned}
+> \end{align}
 > $$
 > 说明 $D(R) v\in \ker(X)$，所以 $\ker(X)$ 是 $D$ 的不变子空间。由于 $D$ 不可约，因此不变子空间只能是 $\{0\}$ 或者 $V$。又因为 $\ker(X)\neq \{0\}$，所以 $\ker(X) = V$。
 >

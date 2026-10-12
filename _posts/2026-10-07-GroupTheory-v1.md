@@ -332,9 +332,27 @@ $n$ 个对象具有 $n!$ 种排列方式；当对象没有区别的时候，这 
 
 ## 矩阵群
 
+### 厄米转置/共轭转置
+
 <img src="/images/blogs/GroupTheory/复向量内积.png" alt="复向量" style="zoom: 60%;" />
 
 <img src="/images/blogs/GroupTheory/厄米矩阵.png" alt="厄米矩阵" style="zoom: 60%;" />
+
+### 厄米矩阵
+
+这里的 "厄米共轭" 是 "先转置再取复共轭" 的操作；不同于 "厄米矩阵"：满足 $\boldsymbol{a} = \boldsymbol{a}^\dagger$ 的方阵。
+
+在复数域里，**“厄米”是“正定”的前提条件**。
+
+> ***Proof.***
+>
+> 在复数域中，我们计算二次型使用的是共轭转置：$v^\dagger A v=\sum_{i,j} \bar{v}_i A_{ij} v_j$。
+>
+> 这是一个复数，说它“大于 0”是没有任何意义的（复数没有大小顺序）。因此，为了让 $v^\dagger A v > 0$ 这个不等式有意义，$v^\dagger A v$ 的结果必须是一个实数。
+>
+> 如果 $v^\dagger A v$ 是实数，那么它的共轭转置应该等于它自己，即 $(v^\dagger A v)^\dagger = v^\dagger A^\dagger v = v^\dagger A v$，即：$A^\dagger = A$。
+
+### 幺正矩阵
 
 <img src="/images/blogs/GroupTheory/幺正矩阵的厄米共轭.png" alt="厄米矩阵" style="zoom: 60%;" />
 
@@ -362,3 +380,185 @@ $$
 <img src="/images/blogs/GroupTheory/群的正则表示.png" alt="群的正则表示" style="zoom: 60%;" />
 
 > 注意：上图右上角正则表示的定义过度简化了
+
+### 可约
+
+> 此处开始，课程的理解难度上升。因此下述内容主要来自笔者和 LLM 的讨论与个人理解。因此可视化部分会减少，取而代之的是较多的数学推导。
+
+假设所有表示矩阵 $D(R)$ 共同作用于向量空间 $V$。如果存在一个非平凡的真子空间 $W$，使得对任意群元素 $R$：
+$$
+D(R)W\subseteq W
+$$
+就称 $W$ 为一个不变子空间（Invariant Subspace）。
+
+**理解：**找到一个子空间 $W$，使得无论群里的哪个元素 $D(R)$ 作用上去，这个子空间里的向量都跑不出去（还在 $W$ 里），那么这个表示就不是最基本的，是可以“约化”的。
+
+> 反之，不可约的理解：任意 $w\in W$，被 $D(R)$ 一作用就 $\in V$ 了。结合到形式化定义中，则是：$\color{red}{不变子空间只可能是 \{0\} 或者 V}$。
+
+**基变换与分块**：如果存在不变子空间 $W$，我们可以选一组基，使得所有的群元素矩阵 $D(R)$ 变成上三角矩阵：
+$$
+D(R) = \begin{pmatrix} D_1(R) & B(R) \\ 0 & D_2(R) \end{pmatrix}
+$$
+其中，$B(R)$ 表示耦合项。
+
+> ***Proof.***
+>
+> 假设全空间 $V$ 是 $n$ 维，不变子空间 $W$ 是 $k$ 维。我们刻意挑选一组基： $\{e_1, e_2, \dots, e_n\}$，其中：
+>
+> - 前 $k$ 个基向量 $\{e_1, e_2, \dots, e_k\}$ 正好是 $W$ 的一组基
+> - 后 $n-k$ 个基向量 $\{e_{k+1}, \dots, e_n\}$ 用来补全整个 $V$。
+>
+> 因为 $W$ 是不变子空间，所以对于任意 $w \in W$，都有 $D(R)w \in W$。矩阵 $D(R)$ 的第 $j$ 列，其实就是**第 $j$ 个（所研究空间）基向量变换后的坐标**，即 $D(R)e_j$。
+>
+> - 当 $j\leq k$ 时，存在 $D(R)e_j \in W$。即意味着，$D(R)$ 的前 $k$ 列向量张成的空间就是不变子空间 $W$。进而意味着，$D(R)e_j = a_{1j}e_1 + \dots + a_{kj}e_k + \color{red}{0 \cdot e_{k+1} + \dots + 0 \cdot e_n}$。即：前 $k$ 列在底部的 $n-k$ 个分量全是 0。
+> - 当 $j>k$ 时，因为 $e_j$ 不在 $W$ 里（它在补空间里），群元素作用不再具有约束，$D(R)e_j$ 可能跑到 $V$ 的任何地方去，所以它可以用全部 $n$ 个基向量来表示，底部元素不一定为 0。
+>
+> 因此得到的矩阵自然就是$\color{red}{上三角矩阵}$。
+
+#### 完全可约
+
+**马施克定理 (Maschke's Theorem)** 保证了：即使一开始我们找到的 $B(R) \neq 0$（存在耦合），我们也可以通过重新选取一组基，让 $B(R)$ 变成 $0$。一旦 $B(R) = 0$，矩阵就变成了分块对角：
+$$
+D(R) = \begin{pmatrix} D_1(R) & 0 \\ 0 & D_2(R) \end{pmatrix}
+$$
+这时，空间被完美劈开：$V = W \oplus U$，且 $W$ 和 $U$ 都是不变子空间。此时 $D(R) = D_1(R) \oplus D_2(R)$。而如果 $D_1$ 和 $D_2$ 都不能再分了，它们就是不可约表示。
+
+### 舒尔定理
+
+#### 不可约表示的等价
+
+假设同一个群 $G$ 有两个表示：$D^{(i)}(R),\quad D^{(j)}(R)$；维数分别为 $m_i,m_j$。
+
+如果存在一个与 $R$ 无关的可逆矩阵 $P$，使得：
+$$
+D^{(i)}(R)P=PD^{(j)}(R), \quad\forall R\in G
+$$
+那么它们是等价表示。
+
+**理解：**等价不要求两个表示矩阵在数值上相同；它们可以相差一个共同的$\color{red}{可逆的}$基变换。理解为：相同的对称操作，但是用不同的视角观察。
+
+<img src="/images/blogs/GroupTheory/表示等价的理解.png" alt="群的正则表示" style="zoom: 30%;" />
+
+#### 交织算子
+
+舒尔定理研究的是更一般性的问题，即不要求 $P$ 可逆，依然要求满足上式，$P$ 可能是什么？这个关系称为交织关系 (Intertwining Relation)，矩阵 $Y$ 称为交织算子(Intertwiner)。下述描述中写为 $Y$，其是线性算子。
+
+假设 $D^{(i)}$、$D^{(j)}$ 是有限群 $G$ 在复数域上的两个$\color{red}{不可约}$表示，且：
+$$
+D^{(i)}(R)Y=YD^{(j)}(R), \quad \forall R\in G
+$$
+那么：
+$$
+\operatorname{Hom}_G(V_j,V_i)=
+\begin{cases}
+\{0\},&i\ne j\\
+\mathbb C I,&i=j
+\end{cases}
+$$
+这里默认 $i,j$ 标记两种不等价的不可约表示；$\operatorname{Hom}_G$ 表示所有满足交织关系的线性映射构成的空间。
+
+> **Step 1.**
+>
+> 首先证明不等价 ($i\neq j$) 时，$Y$ 必须为零。
+>
+> - 推论：若两个不可约表示维数不同，那么 $Y=0$。
+>
+> ***Proof.***
+>
+> 我们首先研究 $Y$ 的核（Kernel）：$\ker(Y)=\{v\in V_j:Yv=0\}$。假设 $v\in\ker(Y)$，那么：$Yv=0$。
+>
+> 利用交织关系：
+> $$
+> \begin{aligned}
+> Y D^{(j)}(R)v
+> &=D^{(i)}(R)Yv\\
+> &=D^{(i)}(R)0\\
+> &=0
+> \end{aligned}
+> $$
+> 因此 $D^{(j)}(R) v\in \ker(Y)$，意味着 $\ker(Y)$ 是 $D^{(j)}$ 的不变子空间。但是 $D^{(j)}$ 不可约，因此其不变子空间只可能是 $\{0\}$ 或者 $V_j$。即：$\textcolor{red}{\ker(Y)=\{0\}\text{或者}\ker(Y)=V_j}$. 
+>
+> 现在假设 $Y\ne0$，即 $Y$ 不会全映射到 $0$ 上。因此 $\ker(Y)\neq V_j$。因此 $\ker(Y)=\{0\}$。
+>
+> 针对线性映射 $Y$，如果 $Y(u) = Y(v)$ 推出 $u = v$，则 $Y$ 是单射。即：$Y(u)-Y(v)=Y(u-v)=0$ 能够推出 $u=v$ 成立。$Y(u-v)=0$ 意味着 $u-v\in \ker(Y)=\{0\}$，即 $u-v=0\iff u=v$。因此 $Y$ 单射。
+>
+> 接下来研究 $Y$ 的像（Image）：$\operatorname{Im}(Y)=\{Yv:v\in V_j\}$。
+>
+> 对任意 $w=Yv$，有：
+> $$
+> \begin{aligned}
+> D^{(i)}(R)w
+> &=D^{(i)}(R)Yv\\
+> &=YD^{(j)}(R)v\\
+> &\in\operatorname{Im}(Y)
+> \end{aligned}
+> $$
+> 因此：$\operatorname{Im}(Y)$ 是 $D^{(i)}$的不变子空间。由于 $D^{(i)}$ 也不可约，所以其不变子空间 $\operatorname{Im}(Y) = \{0\} \or V_j$。鉴于假设 $Y\ne0$，所以：$\operatorname{Im}(Y)=V_i$，即 $Y$ 是满射。
+>
+> 综上，$Y$ 单射且是满射，所以 $Y$ 可逆。此时， $D^{(i)}$ 与 $D^{(j)}$ 的交织关系变成了$\textcolor{red}{等价}$。
+>
+> 由于此时研究的对象是 "不等价的表示"；发生矛盾。因此 $Y=0$。
+>
+> 总证明逻辑链为：
+> $$
+> Y\ne0
+> \implies
+> Y\text{ 既单射又满射}
+> \implies Y\text{ 可逆}
+> \implies D^{(i)}, D^{(j)}\text{ 等价}
+> \implies \textcolor{red}{发生矛盾}
+> \implies Y=0
+> $$
+> ***推论 Proof.***
+> $$
+> 两个不可约表示维数不同
+> \implies
+> Y\text{ 非方阵}
+> \implies Y\text{ 不可逆}
+> $$
+> 又因为有：$Y\ne0\implies Y\text{ 既单射又满射}\implies Y\text{ 可逆}$，利用蕴含的传递性以及逆反命题为真可得：
+> $$
+> 两个不可约表示维数不同
+> \implies
+> Y\text{ 非方阵}
+> \implies Y\text{ 不可逆}
+> \implies
+> Y=0
+> $$
+>
+> **Step 2.** 
+>
+> 然后证明等价 ($i = j$，后续推导简记 $D^{(i)}=D$) 时，$Y=\mathbb C I$。
+>
+> ***Proof.***
+>
+> 根据代数基本定理，在复数域 $\mathbb{C}$ 上，任意一个 $n \times n$ 的矩阵，它的特征多项式（一个 $n$ 次多项式）必定至少有一个复根。所以，我们一定能在复数域中找到一个特征值 $\lambda$。此时，存在一个**非零向量** $v \neq 0$，使得 $Yv = \lambda v$。
+>
+> 现在构造矩阵 $X=Y-\lambda I$。所以有：
+> $$
+> \begin{aligned}
+> X v
+> &=(Y-\lambda I)v\\
+> &=Yv - \lambda v\\
+> &=0\\
+> \end{aligned}
+> $$
+> 这意味着，$v\in \ker(X)$。因为 $v\neq 0$，所以意味着 $X$ 的核空间不止有零： $\ker(X)\neq \{0\}$。
+>
+> 同样利用交织关系：
+> $$
+> \begin{aligned}
+> X D(R)v
+> &=D(R)Xv\\
+> &=D(R)0\\
+> &=0
+> \end{aligned}
+> $$
+> 说明 $D(R) v\in \ker(X)$，所以 $\ker(X)$ 是 $D$ 的不变子空间。由于 $D$ 不可约，因此不变子空间只能是 $\{0\}$ 或者 $V$。又因为 $\ker(X)\neq \{0\}$，所以 $\ker(X) = V$。
+>
+> 这说明任意向量 $v\in V$ 都满足 $Xv=0$。因此只能是 $X=0$，即 $Y=\lambda I$。
+>
+> 因此在所有满足 $i=j$ 的 $V$ 中，$Y=\mathbb{C}I$ 成立。
+
+<img src="/images/blogs/GroupTheory/舒尔定理的直观理解.png" alt="舒尔定理的直观理解" style="zoom: 70%;" />
+
